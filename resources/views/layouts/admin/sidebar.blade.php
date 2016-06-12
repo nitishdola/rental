@@ -36,13 +36,13 @@
         </a>
         <ul class="sub-menu">
             <li>
-                <a href="form_examples.html">
+                <a href="{{ route('renter.create') }}">
                     <i class="fa fa-angle-double-right"></i>
                     Add New Renter
                 </a>
             </li>
             <li>
-                <a href="editor.html">
+                <a href="{{ route('renter.index') }}">
                     <i class="fa fa-angle-double-right"></i>
                     View All renter
                 </a>

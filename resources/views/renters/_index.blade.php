@@ -31,8 +31,14 @@
             <span id="units_{{$v->id}}"></span>
             </td>
             <td>
-                <a href=" {{ route('unit.edit', $v->id) }}">
+                <a href=" {{ route('renter.edit', $v->id) }}">
                     <i class="fa fa-edit"></i>Edit
+                </a>
+            </td>
+
+            <td>
+                <a  style="color:red" href=" {{ route('renter.disable', $v->id) }}">
+                    <i class="fa fa-trash"></i>Delete
                 </a>
             </td>
         </tr>

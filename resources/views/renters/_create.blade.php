@@ -20,13 +20,6 @@
   {!! $errors->first('permanent_address', '<span class="help-inline">:message</span>') !!}
 </div>
 
-<div class="form-group {{ $errors->has('units') ? 'has-error' : ''}}">
-  {!! Form::label('units', 'Units Allocated', array('class' => 'col-md-2 control-label')) !!}
-  <div class="col-md-10">
-    {!! Form::select('units[]', $units,  null, ['class' => 'multiselect form-control required', 'id' => 'units', 'multiple' => "multiple", 'required' => 'true']) !!}
-  </div>
-  {!! $errors->first('units', '<span class="help-inline">:message</span>') !!}
-</div>
 
 @section('pageSpecificScripts')
 <script>

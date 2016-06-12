@@ -6,7 +6,18 @@
     <div class="portlet box danger">
         <div class="portlet-body">
             <div class="table-scrollable">
-                @include('renters._index')
+	            @if(count($results))
+	                @include('renters._index')
+	            @else
+
+				    <div class="alert alert-danger fade in">
+
+				        <a href="#" class="close" data-dismiss="alert">&times;</a>
+
+				        <strong>Oops!</strong> No results found 
+
+				    </div>
+				@endif
             </div>
         </div>
     </div>

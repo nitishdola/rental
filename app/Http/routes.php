@@ -92,4 +92,42 @@ Route::group(['prefix'=>'renter'], function() {
         'middleware' => 'admin',
         'uses' => 'RentersController@unit_details'
     ]);
+
+    Route::get('/disable/{num}', [
+        'as' => 'renter.disable',
+        'middleware' => 'admin',
+        'uses' => 'RentersController@delete'
+    ]);
+});
+
+Route::group(['prefix'=>'bill'], function() {
+    Route::get('/create', [
+        'as' => 'bill.create',
+        'middleware' => ['admin'],
+        'uses' => 'BillsController@create'
+    ]);
+
+    Route::post('/store', [
+        'as' => 'bill.store',
+        'middleware' => 'admin',
+        'uses' => 'BillsController@store'
+    ]);
+
+    Route::get('/view-all', [
+        'as' => 'bill.index',
+        'middleware' => 'admin',
+        'uses' => 'BillsController@index'
+    ]);
+
+    Route::get('/edit/{num}', [
+        'as' => 'bill.edit',
+        'middleware' => 'admin',
+        'uses' => 'BillsController@edit'
+    ]);
+
+    Route::post('/update/{num}', [
+        'as' => 'bill.update',
+        'middleware' => 'admin',
+        'uses' => 'BillsController@update'
+    ]);
 });
