@@ -6,13 +6,18 @@ use Illuminate\Database\Eloquent\Model;
 
 class Bill extends Model
 {
-    protected $fillable = array('renter_id', 'rent_amount', 'bill_amount', 'bill_month');
+    protected $fillable = array('bill_type', 'renter_id', 'rent_amount', 'bill_amount', 'monthyear');
 	protected $table    = 'bills';
     protected $guarded  = ['_token'];
 
     public static $rules = [
-    	'renter_id' 	=> 'required|exists:renters, id',
+    	'renter_id' 	=> 'required|exists:renters,id',
     	'bill_amount' 	=> 'required|numeric',
-    	'bill_month' 	=> 'required|numeric'
+    	'monthyear' 	=> 'required|date_format:m-Y'
     ];
+
+    public function renter() 
+	{
+		return $this->belongsTo('App\Renter', 'renter_id');
+	}
 }

@@ -37,7 +37,7 @@
             </td>
 
             <td>
-                <a  style="color:red" href=" {{ route('renter.disable', $v->id) }}">
+                <a  style="color:red" onclick="return confirm('Are you sure you want to delete this item?');" href=" {{ route('renter.disable', $v->id) }}">
                     <i class="fa fa-trash"></i>Delete
                 </a>
             </td>

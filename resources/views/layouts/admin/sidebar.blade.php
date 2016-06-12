@@ -57,13 +57,13 @@
         </a>
         <ul class="sub-menu">
             <li>
-                <a href="animatedicons.html">
+                <a href="{{ route('bill.create')}}">
                     <i class="fa fa-angle-double-right"></i>
                     Add Bills
                 </a>
             </li>
             <li>
-                <a href="buttons.html">
+                <a href="{{ route('bill.index') }}">
                     <i class="fa fa-angle-double-right"></i>
                     View Bills
                 </a>

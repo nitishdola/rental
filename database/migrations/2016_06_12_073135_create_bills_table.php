@@ -14,6 +14,10 @@ class CreateBillsTable extends Migration
     {
         Schema::create('bills', function (Blueprint $table) {
             $table->increments('id');
+            $table->text('bill_type');
+            $table->date('monthyear')->description('Only month and Year will be extracted from this field');
+            $table->integer('renter_id');
+            $table->decimal('bill_amount', 10, 2);
             $table->timestamps();
         });
     }

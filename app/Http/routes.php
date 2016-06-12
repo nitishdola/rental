@@ -113,6 +113,13 @@ Route::group(['prefix'=>'bill'], function() {
         'uses' => 'BillsController@store'
     ]);
 
+    Route::get('/view/{num}', [
+        'as' => 'bill.view',
+        'middleware' => 'admin',
+        'uses' => 'BillsController@view'
+    ]);
+
+
     Route::get('/view-all', [
         'as' => 'bill.index',
         'middleware' => 'admin',
