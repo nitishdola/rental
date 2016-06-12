@@ -10,7 +10,7 @@
 @section('content')
 <div class="panel panel-primary">
     <div class="panel-body">
-        {!! Form::open(array('route' => 'renter.store', 'id' => 'unit_store', 'class' => 'form-horizontal row-border')) !!}
+        {!! Form::open(array('route' => 'renter.store', 'id' => 'renter_store', 'class' => 'form-horizontal row-border')) !!}
             @include('renters._create')
             {!! Form:: submit('Submit', ['class' => 'btn btn-success']) !!}
         {!!form::close()!!}

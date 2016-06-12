@@ -108,11 +108,7 @@
      <script src="{{ asset('vendors/jscharts/Chart.js') }}"></script>
     <script src="{{ asset('js/dashboard.js') }}" type="text/javascript"></script>
     @yield('pageJs')
-    <script type="text/javascript">
-    $(document).ready(function() {
-        $('.multiselect').multiselect();
-    });
-    </script>
+    
     @yield('pageSpecificScripts')
     <!-- end of page level js -->
   

@@ -14,7 +14,7 @@
 
 Route::auth();
 
-Route::get('/', 'HomeController@index');
+Route::get('/', ['uses' => 'AdminAuth\AuthController@showDashboard', 'middleware' => 'admin']);
 
 
 //Login Routes...
@@ -85,5 +85,11 @@ Route::group(['prefix'=>'renter'], function() {
         'as' => 'renter.update',
         'middleware' => 'admin',
         'uses' => 'RentersController@update'
+    ]);
+
+    Route::get('/unit-details', [
+        'as' => 'renter.unit.info',
+        'middleware' => 'admin',
+        'uses' => 'RentersController@unit_details'
     ]);
 });

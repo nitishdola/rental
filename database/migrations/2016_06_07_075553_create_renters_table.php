@@ -14,6 +14,10 @@ class CreateRentersTable extends Migration
     {
         Schema::create('renters', function (Blueprint $table) {
             $table->increments('id');
+            $table->string('name');
+            $table->string('phone_number');
+            $table->string('permanent_address', 255);
+            $table->tinyInteger('status')->default(1);
             $table->timestamps();
         });
     }
