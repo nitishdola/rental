@@ -13,7 +13,7 @@ use App\Bill, App\Renter, App\Unit, App\RenterUnit;
 class BillsController extends Controller
 {
     public function index() {
-        $results = Bill::orderBy('created_at', 'DESC')->paginate(20);
+        $results = Bill::with('renter')->orderBy('created_at', 'DESC')->paginate(20);
     	return view('bills.index', compact('results'));
     }
 
@@ -57,5 +57,38 @@ class BillsController extends Controller
         }
 
         return Redirect::route('bill.view', $bill->id)->with('message', $message);
+    }
+
+    public function edit($id) {
+        $renters = Renter::orderBy('name')->lists('name', 'id')->toArray();
+        $bill    = Bill::findOrFail($id);
+        $bill['monthyear'] = date('m-Y', strtotime($bill->monthyear));
+        return view('bills.edit', compact('renters', 'bill'));
+    }
+
+    public function update(Request $request, $id ) {
+        $validator = Validator::make($data = $request->all(), Bill::$rules);
+        if ($validator->fails()) return Redirect::back()->withErrors($validator)->withInput();
+
+        $data['monthyear'] = '01-'.$request->monthyear;
+        $data['monthyear'] = date('Y-m-d', strtotime( $data['monthyear'] ));
+        $message = '';
+
+        $bill    = Bill::findOrFail($id);   
+        $bill->fill($data);
+
+        if($bill->save()) {
+                $message .= 'Bill updated successfully !';
+        }else{
+            $message .= 'Unable to update renter !';
+        }
+
+        return Redirect::route('bill.view', $bill->id)->with('message', $message);
+    }
+
+    public function delete($id) {
+        Bill::destroy($id);
+        $message = 'Bill Removed !';
+        return Redirect::route('bill.index')->with('message', $message);
     }
 }

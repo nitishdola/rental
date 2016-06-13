@@ -137,4 +137,10 @@ Route::group(['prefix'=>'bill'], function() {
         'middleware' => 'admin',
         'uses' => 'BillsController@update'
     ]);
+
+    Route::get('/disable/{num}', [
+        'as' => 'bill.disable',
+        'middleware' => 'admin',
+        'uses' => 'BillsController@delete'
+    ]);
 });
