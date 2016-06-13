@@ -9,6 +9,8 @@ use Illuminate\Foundation\Auth\ThrottlesLogins;
 use Illuminate\Foundation\Auth\AuthenticatesAndRegistersUsers;
 use Auth;
 
+use App\Unit,App\Renter,App\Bill;
+
 class AuthController extends Controller
 {
     use AuthenticatesAndRegistersUsers, ThrottlesLogins;
@@ -18,7 +20,10 @@ class AuthController extends Controller
     protected $username = 'username';
     
     public function showDashboard() {
-        return view('auth.admin.dashboard');
+        $units = Unit::count();
+        $renters = Renter::count();
+        $bills = Bill::count();
+        return view('auth.admin.dashboard', compact('units', 'renters', 'bills'));
     }
     public function showLoginForm()
     {

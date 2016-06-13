@@ -103,4 +103,24 @@ class RentersController extends Controller
         }
         return Redirect::route('renter.index')->with('message', $message);
     }
+
+    public function view_bill($renter_id) {
+        $billInfo = Bill::findOrFail($id);
+
+        $monthyear = $billInfo->monthyear;
+
+        $result = Bill::where(['renter_id' => $renter_id, 'monthyear' => $monthyear])->with('renter')->get();
+        $renterInfo = Renter::findOrFail($renter_id);
+
+        $rentInfo = RenterUnit::where('renter_id', $renterInfo->id)->get();
+
+        $unit_rent = 0;
+
+        foreach($rentInfo as $k => $v) {
+            $unitInfo = Unit::findOrFail($v->unit_id);
+            $unit_rent += $unitInfo->fare;
+        }
+
+        return view('bills.view', compact('result', 'renterInfo', 'monthyear', 'unit_rent'));
+    }
 }

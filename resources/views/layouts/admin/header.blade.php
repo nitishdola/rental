@@ -1,5 +1,5 @@
-<a href="index.html" class="logo">
-    <img src="img/logo.png" alt="Logo">
+<a href="{{ route('admin_dashboard') }}" class="logo">
+    <img src="{{ asset('img/logo.png') }}" alt="Logo">
 </a>
 <nav class="navbar navbar-static-top" role="navigation">
     <!-- Sidebar toggle button-->
@@ -14,7 +14,7 @@
                 <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                     <div class="riot">
                         <div>
-                            Riot
+                            Admin
                             <span>
                                 <i class="caret"></i>
                             </span>

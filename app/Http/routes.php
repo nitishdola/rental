@@ -98,6 +98,12 @@ Route::group(['prefix'=>'renter'], function() {
         'middleware' => 'admin',
         'uses' => 'RentersController@delete'
     ]);
+
+    Route::get('/view-bill/{num}', [
+        'as' => 'renter.view_bill',
+        'middleware' => 'admin',
+        'uses' => 'RentersController@view_bill'
+    ]);
 });
 
 Route::group(['prefix'=>'bill'], function() {

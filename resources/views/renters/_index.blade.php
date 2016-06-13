@@ -30,6 +30,12 @@
             <td> <a href="#" title="View Units" onclick="showUnits({{$v->id}}, event)"> {{ count($v->renter_unit) }}</a> 
             <span id="units_{{$v->id}}"></span>
             </td>
+
+            <td> <a href=" {{ route('renter.view_bill', $v->id) }}">
+                    <i class="fa fa-eye"></i> View Bill
+                </a> 
+            </td>
+
             <td>
                 <a href=" {{ route('renter.edit', $v->id) }}">
                     <i class="fa fa-edit"></i>Edit
