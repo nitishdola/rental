@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 
 use App\Http\Requests;
 
-use App\Unit, App\Renter, App\RenterUnit, App\Bill;
+use App\BillPayment, App\Unit, App\Renter, App\RenterUnit, App\Bill;
 use Redirect, DB, Validator;
 
 class RentersController extends Controller
@@ -114,6 +114,9 @@ class RentersController extends Controller
             $unit_rent += $unitInfo->fare;
         }
 
-        return view('bills.view', compact('result', 'renterInfo', 'monthyear', 'unit_rent'));
+        //check if paid
+        $check_paid = BillPayment::where('renter_id', $renter_id)->where('monthyear', '01-'.$monthyear)->count();
+
+        return view('bills.view', compact('result', 'renterInfo', 'monthyear', 'unit_rent', 'check_paid'));
     }
 }

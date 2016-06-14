@@ -10,10 +10,6 @@
             </div>
         </div>
     </div> 
-    <div class="portlet box danger">
-        <div class="portlet-body">
-        	<a href="#" class="btn btn-success"> PAY BILL </a>
-        </div>
-    </div>
+    
 </div>
 @stop

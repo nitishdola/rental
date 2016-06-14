@@ -149,4 +149,22 @@ Route::group(['prefix'=>'bill'], function() {
         'middleware' => 'admin',
         'uses' => 'BillsController@delete'
     ]);
+
+    Route::post('/pay', [
+        'as' => 'bill.pay',
+        'middleware' => 'admin',
+        'uses' => 'BillPaymentsController@make_payment'
+    ]);
+
+    Route::get('/report', [
+        'as' => 'bill.report_search',
+        'middleware' => 'admin',
+        'uses' => 'BillPaymentsController@report_search'
+    ]);
+
+    Route::get('/report-search-result', [
+        'as' => 'bill.report_search_result',
+        'middleware' => 'admin',
+        'uses' => 'BillPaymentsController@report_search_result'
+    ]);
 });

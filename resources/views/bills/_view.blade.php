@@ -48,3 +48,19 @@
 	    </tbody>
 	</table>
 </div>
+
+<div class="portlet box danger">
+        <div class="portlet-body">
+        		@if(!$check_paid)
+                {!! Form::open(array('route' => 'bill.pay', 'id' => 'bill_pay', 'class' => 'form-horizontal row-border')) !!}
+                    {!! Form::hidden('rent', $unit_rent) !!}
+                    {!! Form::hidden('renter_id', $renterInfo->id) !!}
+                    {!! Form::hidden('total_payble', $unit_rent+$other_bill_amount) !!}
+                    {!! Form::hidden('monthyear', $monthyear) !!}
+                    {!! Form:: submit('PAY BILL', ['class' => 'btn btn-success']) !!}
+                {!!form::close()!!}
+                @else
+                	<button class="btn btn-info disabled"> BILL PAID </button>
+                @endif
+        </div>
+    </div>

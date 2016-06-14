@@ -8,7 +8,7 @@ use App\Http\Requests;
 
 use DB, Validator, Redirect;
 
-use App\Bill, App\Renter, App\Unit, App\RenterUnit;
+use App\Bill, App\Renter, App\Unit, App\RenterUnit, App\BillPayment;
 
 class BillsController extends Controller
 {
@@ -40,7 +40,9 @@ class BillsController extends Controller
             $unit_rent += $unitInfo->fare;
         }
 
-        return view('bills.view', compact('result', 'renterInfo', 'monthyear', 'unit_rent'));
+        $check_paid = BillPayment::where('renter_id', $renter_id)->where('monthyear',$monthyear)->count();
+
+        return view('bills.view', compact('result', 'renterInfo', 'monthyear', 'unit_rent', 'check_paid'));
     }
 
     public function store(Request $request ) {
