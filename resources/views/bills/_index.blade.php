@@ -17,7 +17,9 @@
             <th>
                 #
             </th>
-
+            <th class="hidden-xs">
+                Month
+            </th>
             <th>
                 Renter Name
             </th>
@@ -43,6 +45,7 @@
         @foreach($results as $k => $v)
         <tr>
             <td> {{ (($results->currentPage() - 1 ) * $results->perPage() ) + $count + $k }} </td>
+            <td> {{ date('F , Y', strtotime($v->monthyear)) }}</td>
             <td> {{ $v->renter['name'] }}</td>
             <td class="hidden-xs"> {{ $v->bill_type }} </td>
             <td> {{ $v->bill_amount }} </td>

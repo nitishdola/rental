@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 
 use App\Http\Requests;
 
-use App\Unit, App\Renter, App\RenterUnit;
+use App\Unit, App\Renter, App\RenterUnit, App\Bill;
 use Redirect, DB, Validator;
 
 class RentersController extends Controller
@@ -39,12 +39,6 @@ class RentersController extends Controller
     }
 
     public  function index() {
-    	/*return $renters = DB::table('renters')
-            ->select('renters.name as renterName', 'units.name as unitName' )
-            ->join('renter_units', 'renter_units.renter_id', '=', 'renters.id')
-            ->join('units', 'renter_units.unit_id', '=', 'units.id')
-
-            ->get(); dump($renters);*/
         $results = Renter::whereStatus(1)->with('renter_unit')->paginate(20);
         return view('renters.index', compact('results'));
     }
@@ -105,9 +99,8 @@ class RentersController extends Controller
     }
 
     public function view_bill($renter_id) {
-        $billInfo = Bill::findOrFail($id);
-
-        $monthyear = $billInfo->monthyear;
+        $monthyear  = date('Y-m');
+        $bills      = Bill::where('monthyear', $monthyear)->get();
 
         $result = Bill::where(['renter_id' => $renter_id, 'monthyear' => $monthyear])->with('renter')->get();
         $renterInfo = Renter::findOrFail($renter_id);

@@ -32,7 +32,7 @@
             </td>
 
             <td> <a href=" {{ route('renter.view_bill', $v->id) }}">
-                    <i class="fa fa-eye"></i> View Bill
+                    <i class="fa fa-eye"></i> View Bill for {{ date('M Y')}}
                 </a> 
             </td>
 
