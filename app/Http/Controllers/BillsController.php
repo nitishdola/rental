@@ -23,7 +23,7 @@ class BillsController extends Controller
     }
 
     public function view( $id ) {
-        $billInfo = Bill::findOrFail($id);
+        /*$billInfo = Bill::findOrFail($id);
         
         $renter_id = $billInfo->renter_id;
         $monthyear = $billInfo->monthyear;
@@ -40,7 +40,7 @@ class BillsController extends Controller
             $unit_rent += $unitInfo->fare;
         }
 
-        $check_paid = BillPayment::where('renter_id', $renter_id)->where('monthyear',$monthyear)->count();
+        $check_paid = BillPayment::where('renter_id', $renter_id)->where('monthyear',$monthyear)->count();*/
 
         return view('bills.view', compact('result', 'renterInfo', 'monthyear', 'unit_rent', 'check_paid'));
     }
@@ -58,7 +58,7 @@ class BillsController extends Controller
             $message .= 'Unable to add renter !';
         }
 
-        return Redirect::route('bill.view', $bill->id)->with('message', $message);
+        return Redirect::route('bill.index')->with('message', $message);
     }
 
     public function edit($id) {

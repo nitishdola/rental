@@ -168,3 +168,18 @@ Route::group(['prefix'=>'bill'], function() {
         'uses' => 'BillPaymentsController@report_search_result'
     ]);
 });
+
+
+Route::group(['prefix'=>'bill-payments'], function() {
+    Route::get('/create-bill', [
+        'as' => 'bill_payment.create',
+        'middleware' => ['admin'],
+        'uses' => 'BillPaymentsController@create_bill'
+    ]);
+
+    Route::post('/generate-bill', [
+        'as' => 'bill_payment.generate',
+        'middleware' => ['admin'],
+        'uses' => 'BillPaymentsController@generate_bill'
+    ]);
+});

@@ -100,23 +100,12 @@ class RentersController extends Controller
 
     public function view_bill($renter_id) {
         $monthyear  = date('Y-m');
-        $bills      = Bill::where('monthyear', $monthyear)->get();
 
-        $result = Bill::where(['renter_id' => $renter_id, 'monthyear' => $monthyear])->with('renter')->get();
         $renterInfo = Renter::findOrFail($renter_id);
+        $bill_details = BillPayment::where(['renter_id' => $renter_id, 'monthyear' => $monthyear.'-01'])->first();
 
-        $rentInfo = RenterUnit::where('renter_id', $renterInfo->id)->get();
+        $other_bills = Bill::where(['renter_id' => $renter_id, 'monthyear' => $monthyear.'-01'])->get();
 
-        $unit_rent = 0;
-
-        foreach($rentInfo as $k => $v) {
-            $unitInfo = Unit::findOrFail($v->unit_id);
-            $unit_rent += $unitInfo->fare;
-        }
-
-        //check if paid
-        $check_paid = BillPayment::where('renter_id', $renter_id)->where('monthyear', '01-'.$monthyear)->count();
-
-        return view('bills.view', compact('result', 'renterInfo', 'monthyear', 'unit_rent', 'check_paid'));
+        return view('bills.view', compact('bill_details', 'renterInfo', 'monthyear', 'other_bills'));
     }
 }

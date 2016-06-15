@@ -30,9 +30,9 @@
             <th>
                 Amount
             </th>
-            <th>
+            <!-- <th>
                 View Bill
-            </th>
+            </th> -->
             <th>
                 Action
             </th>
@@ -51,11 +51,11 @@
             <td> {{ $v->bill_amount }} </td>
             
 
-            <td>
-                <a href=" {{ route('bill.view', $v->id) }}">
-                    <i class="fa fa-eye"></i>View Bill
+            <!-- <td>
+                <a href=" {{ route('renter.view_bill', $v->renter_id) }}">
+                    <i class="fa fa-eye"></i>View Full Month Bill
                 </a>
-            </td>
+            </td> -->
 
             <td>
                 <a href=" {{ route('bill.edit', $v->id) }}">

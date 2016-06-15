@@ -19,6 +19,7 @@
 </div>
 
 <div class="row">
+    @if($bill_details)
 	<table class="table table-striped table-hover">
 	    <thead>
 	        <tr>
@@ -30,10 +31,10 @@
 	    <tbody style="text-align:center">
 	    	<tr>
 	    		<td> Rent </td>
-	    		<td> {{ number_format($unit_rent,2,".",",") }} </td>
+	    		<td> {{ number_format($bill_details->rent,2,".",",") }} </td>
 	    	</tr>
-	    	<?php $other_bill_amount = $unit_rent; ?>
-	    	@foreach($result as $k => $v)
+            <?php $other_bill_amount = 0; ?>
+	    	@foreach($other_bills as $k => $v)
 	    	<tr>
 	    		<td> {{ ucfirst($v->bill_type) }} </td>
 	    		<td> {{ $v->bill_amount }} </td>
@@ -43,7 +44,7 @@
 
 	    	<tr style="font-weight:bold">
 	    		<td> Total Bill </td>
-	    		<td> {{ number_format($other_bill_amount,2,".",",") }} </td>
+	    		<td> {{ number_format($bill_details->total_payble,2,".",",") }} </td>
 	    	</tr>
 	    </tbody>
 	</table>
@@ -51,12 +52,9 @@
 
 <div class="portlet box danger">
         <div class="portlet-body">
-        		@if(!$check_paid)
+        		@if($bill_details->paid == 'no')
                 {!! Form::open(array('route' => 'bill.pay', 'id' => 'bill_pay', 'class' => 'form-horizontal row-border')) !!}
-                    {!! Form::hidden('rent', $unit_rent) !!}
-                    {!! Form::hidden('renter_id', $renterInfo->id) !!}
-                    {!! Form::hidden('total_payble', $unit_rent+$other_bill_amount) !!}
-                    {!! Form::hidden('monthyear', $monthyear) !!}
+                    {!! Form::hidden('bill_payment_id', $bill_details->id) !!}
                     {!! Form:: submit('PAY BILL', ['class' => 'btn btn-success']) !!}
                 {!!form::close()!!}
                 @else
@@ -64,3 +62,8 @@
                 @endif
         </div>
     </div>
+@else
+
+Bill not yet generated
+
+@endif

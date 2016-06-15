@@ -70,6 +70,22 @@
             </li>
         </ul>
     </li>
+
+    <li>
+        <a href=" {{ route('bill_payment.create') }}">
+            <i class="livicon" data-name="map" data-c="#F89A55" data-hc="#F89A55" data-size="18" data-loop="true"></i>
+            <span class="title">Generate bill</span>
+            <span class="fa arrow-right"></span>
+        </a>
+    </li>
+
+    <li>
+        <a href=" {{ route('bill.report_search') }}">
+            <i class="livicon" data-name="barchart" data-c="#F89A55" data-hc="#F89A55" data-size="18" data-loop="true"></i>
+            <span class="title">Bill Payment Report</span>
+            <span class="fa arrow-right"></span>
+        </a>
+    </li>
     
 </ul>
 <!-- END SIDEBAR MENU -->

@@ -17,4 +17,9 @@ class BillPayment extends Model
     	'pay_date' 	=> 'required|date_format:Y-m-d',
     	'monthyear' => 'required|date_format:Y-m'
     ];
+
+    public function renter() 
+    {
+        return $this->belongsTo('App\Renter', 'renter_id');
+    }
 }

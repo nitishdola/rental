@@ -1,7 +1,7 @@
 <div class="form-group {{ $errors->has('bill_type') ? 'has-error' : ''}}">
   {!! Form::label('bill_type', 'Bill type', array('class' => 'col-md-2 control-label')) !!}
   <div class="col-md-10">
-    {!! Form::text('bill_type', null, ['class' => 'form-control required', 'id' => 'bill_type', 'placeholder' => 'Bill Type eg Electricity Bill', 'autocomplete' => 'off', 'required' => 'true']) !!}
+    {!! Form::text('bill_type', null, ['class' => 'form-control required', 'id' => 'bill_type', 'placeholder' => 'Bill Type eg Electricity Bill', 'required' => 'true']) !!}
   </div>
   {!! $errors->first('bill_amount', '<span class="help-inline">:message</span>') !!}
 </div>
