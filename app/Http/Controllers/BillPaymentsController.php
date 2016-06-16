@@ -87,6 +87,11 @@ class BillPaymentsController extends Controller
 
     public function report_search_result(Request $request) {
         $matchThese = [];
+
+        if($request->paid) {
+            $matchThese['paid'] = $request->paid;
+        }
+        
         if($request->renter_id) {
             $matchThese['renter_id'] = $request->renter_id;
         }

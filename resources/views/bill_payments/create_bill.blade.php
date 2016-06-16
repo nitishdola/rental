@@ -5,10 +5,17 @@
 @section('content')
 <div class="panel panel-primary">
     <div class="panel-body">
+    	@if(count($renters))
         {!! Form::open(array('method' => 'post', 'route' => 'bill_payment.generate', 'id' => 'bill_search', 'class' => 'form-horizontal row-border')) !!}
             @include('bill_payments._create_bill')
             {!! Form:: submit('Generate', ['class' => 'btn btn-success']) !!}
         {!!form::close()!!}
+        @else
+        	<div class="alert alert-success fade in">
+		        <a href="#" class="close" data-dismiss="alert">&times;</a>
+		        <strong>All bills have been generated for {{ date('F,Y') }}</strong> 
+		    </div>
+        @endif
     </div>
 </div>
 @endsection
