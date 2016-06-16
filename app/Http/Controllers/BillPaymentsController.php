@@ -33,11 +33,11 @@ class BillPaymentsController extends Controller
         for($i = 0; $i < count($request->renters); $i++) {
             $renter_id = $request->renters[$i];
 
-            $bills = Bill::where(['renter_id' => $renter_id, 'monthyear' => $monthyear])->get();
+            $bills = Bill::where(['renter_id' => $renter_id, 'monthyear' => $monthyear.'-1'])->get();
             
-            $add_bill = 0;
+            $additional_bill = 0;
             foreach($bills as $k1 => $v1) {
-                $add_bill += $v1->bill_amount;
+                $additional_bill += $v1->bill_amount;
             }
 
 
@@ -52,7 +52,7 @@ class BillPaymentsController extends Controller
 
             $data['renter_id']  = $renter_id;
             $data['rent']       = $unit_rent;
-            $data['total_payble'] = $unit_rent + $add_bill;
+            $data['total_payble'] = $unit_rent + $additional_bill;
             $data['monthyear']  = date('Y-m-d', strtotime($monthyear));
             $data['paid']       = 'no';
 
