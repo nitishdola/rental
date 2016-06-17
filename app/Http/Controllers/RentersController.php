@@ -12,7 +12,14 @@ use Redirect, DB, Validator;
 class RentersController extends Controller
 {
     public function create() {
-    	$units = Unit::orderBy('name')->lists('name', 'id')->toArray();
+        $renter_units = RenterUnit::get();
+
+        $allocated_units = [];
+
+        foreach($renter_units as $k => $v) {
+            $allocated_units[] = $v->unit_id;
+        }
+    	$units = Unit::orderBy('name')->whereNotIn('id', $allocated_units)->lists('name', 'id')->toArray();
     	return view('renters.create', compact('units'));
     }
 
@@ -97,7 +104,6 @@ class RentersController extends Controller
         }
         return Redirect::route('renter.index')->with('message', $message);
     }
-
     public function view_bill($renter_id) {
         $monthyear  = date('Y-m');
 
@@ -107,5 +113,12 @@ class RentersController extends Controller
         $other_bills = Bill::where(['renter_id' => $renter_id, 'monthyear' => $monthyear.'-01'])->get();
 
         return view('bills.view', compact('bill_details', 'renterInfo', 'monthyear', 'other_bills'));
+    }
+
+    public function view_previous_bill( $renter_id ) {
+        $renter =Renter::findOrFail($renter_id);
+        $results = BillPayment::where('renter_id', $renter_id)->orderBy('created_at', 'DESC')->paginate(30);
+
+        return view('bill_payments.view_previous_bill', compact('renter', 'results'));
     }
 }

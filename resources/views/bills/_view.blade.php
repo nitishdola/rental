@@ -1,3 +1,15 @@
+<style>
+@media print {
+    .header, .left-side, .content-header,#other-btn {
+     display:none;
+    }
+
+    #prnt {
+     display:block;
+    }
+}
+</style>
+<div id="prnt">
 <div class="row">
     <ul class="timeline">
         <li>
@@ -49,8 +61,8 @@
 	    </tbody>
 	</table>
 </div>
-
-<div class="portlet box danger">
+</div>
+<div class="portlet box danger" id="other-btn">
         <div class="portlet-body">
         		@if($bill_details->paid == 'no')
                 {!! Form::open(array('route' => 'bill.pay', 'id' => 'bill_pay', 'class' => 'form-horizontal row-border')) !!}
@@ -61,9 +73,40 @@
                 	<button class="btn btn-info disabled"> BILL PAID </button>
                 @endif
         </div>
+        <button class="btn btn-success" onclick="window.print()"><span class="glyphicon glyphicon-print"></span> PRINT </button>
     </div>
 @else
 
 Bill not yet generated
 
 @endif
+
+@section('pageSpecificScripts')
+<script type="text/javascript">
+
+    function PrintElem(elem)
+    {
+       Popup($(elem).html());
+    }
+
+    function Popup(data) 
+    {
+        var mywindow = window.open('', 'my div', 'height=400,width=600');
+        mywindow.document.write('<html><head><title>Tender</title>');
+        /*optional stylesheet*/ 
+        mywindow.document.write('<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" type="text/css" />');
+        mywindow.document.write('</head><body >');
+        mywindow.document.write(data);
+        mywindow.document.write('</body></html>');
+
+        mywindow.document.close(); // necessary for IE >= 10
+        mywindow.focus(); // necessary for IE >= 10
+
+        mywindow.print();
+        mywindow.close();
+
+        return true;
+    }
+
+</script>
+@stop

@@ -10,6 +10,7 @@
 @section('content')
 <div class="panel panel-primary">
     <div class="panel-body">
+        @if(count($units))
         {!! Form::open(array('route' => 'renter.store', 'id' => 'renter_store', 'class' => 'form-horizontal row-border')) !!}
             @include('renters._create')
             <div class="form-group {{ $errors->has('units') ? 'has-error' : ''}}">
@@ -21,6 +22,10 @@
 			</div>
             {!! Form:: submit('Submit', ['class' => 'btn btn-success']) !!}
         {!!form::close()!!}
+
+        @else
+            All units are allocated. Create units to allocate a renter <a href="{{ route('unit.create') }}" class="btn btn-success"> Create new unit</a>
+        @endif
     </div>
 </div>
 @endsection

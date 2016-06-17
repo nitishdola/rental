@@ -104,6 +104,12 @@ Route::group(['prefix'=>'renter'], function() {
         'middleware' => 'admin',
         'uses' => 'RentersController@view_bill'
     ]);
+
+    Route::get('/view-previous-bills/{num}', [
+        'as' => 'renter.view_previous_bill',
+        'middleware' => 'admin',
+        'uses' => 'RentersController@view_previous_bill'
+    ]);
 });
 
 Route::group(['prefix'=>'bill'], function() {
