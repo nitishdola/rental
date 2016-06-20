@@ -1,5 +1,12 @@
+<style>
+a.logo{
+    color: #FFF !important;
+    font-weight: bold;
+    font-size: 22px;
+}
+</style>
 <a href="{{ route('admin_dashboard') }}" class="logo">
-    <img src="{{ asset('img/logo.png') }}" alt="Logo">
+    Rental Management
 </a>
 <nav class="navbar navbar-static-top" role="navigation">
     <!-- Sidebar toggle button-->

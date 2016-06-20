@@ -65,21 +65,22 @@ class BillPaymentsController extends Controller
 
     public function make_payment(Request $request) {
 
-        dd($request);
-
-    	$bill_payment = BillPayment::findOrFail($request->bill_payment_id);
-
-        $bill_payment->paid = 'yes';
-        $bill_payment->pay_date = date('Y-m-d');
         $message  = '';
+        $success_bill = 0;
 
-    	if($bill_payment->save()) {
-            	$message .= 'Bill paid successfully !';
-        }else{
-            $message .= 'Unable to pay bill !';
+        for($i = 0; $i < count($request->bill_payment_id); $i++) {
+            $bill_payment = BillPayment::findOrFail($request->bill_payment_id[$i]);
+
+            $bill_payment->paid = 'yes';
+            $bill_payment->pay_date = date('Y-m-d');
+            
+
+            if($bill_payment->save()) {
+                $success_bill++;
+            }
         }
-
-        return Redirect::route('bill.view', $bill_payment->renter_id)->with('message', $message);
+        $message    .= $success_bill'. Bill paid successfully !';
+        return Redirect::route('renter.view_bill', $bill_payment->renter_id)->with('message', $message);
     }
 
     public function report_search() {
