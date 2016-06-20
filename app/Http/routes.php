@@ -228,4 +228,10 @@ Route::group(['prefix'=>'electricity-unit'], function() {
         'middleware' => 'admin',
         'uses' => 'ElectricityUnitsController@delete'
     ]);
+
+    Route::get('/electricity-cost', [
+        'as' => 'electricity_units.cost',
+        //'middleware' => 'admin',
+        'uses' => 'ElectricityUnitsController@get_cost'
+    ]);
 });

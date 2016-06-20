@@ -1,10 +1,19 @@
-<div class="form-group {{ $errors->has('bill_type') ? 'has-error' : ''}}">
-  {!! Form::label('bill_type', 'Bill type', array('class' => 'col-md-2 control-label')) !!}
+<div class="form-group {{ $errors->has('bill_type_id') ? 'has-error' : ''}}">
+  {!! Form::label('bill_type_id', 'Bill type', array('class' => 'col-md-2 control-label')) !!}
   <div class="col-md-10">
-    {!! Form::text('bill_type', null, ['class' => 'form-control required', 'id' => 'bill_type', 'placeholder' => 'Bill Type eg Electricity Bill', 'required' => 'true']) !!}
+    {!! Form::select('bill_type_id', $bill_types, null, ['class' => 'form-control required', 'id' => 'bill_type_id', 'placeholder' => 'Select Bill Type', 'required' => 'true']) !!}
   </div>
-  {!! $errors->first('bill_amount', '<span class="help-inline">:message</span>') !!}
+  {!! $errors->first('bill_type_id', '<span class="help-inline">:message</span>') !!}
 </div>
+
+<div class="form-group {{ $errors->has('number_of_electricity_unit') ? 'has-error' : ''}}" id="number_of_electricity_unit_div" style="display:none">
+  {!! Form::label('number_of_electricity_unit', 'Number of Units', array('class' => 'col-md-2 control-label')) !!}
+  <div class="col-md-10">
+    {!! Form::number('number_of_electricity_unit', null, ['class' => 'form-control required', 'id' => 'number_of_electricity_unit', 'placeholder' => 'Number of units', 'autocomplete' => 'off', 'required' => 'true']) !!}
+  </div>
+  {!! $errors->first('number_of_electricity_unit', '<span class="help-inline">:message</span>') !!}
+</div>
+
 <div class="form-group {{ $errors->has('name') ? 'has-error' : ''}}">
   {!! Form::label('monthyear', 'Bill Month', array('class' => 'col-md-2 control-label')) !!}
   <div class="col-md-10">
@@ -12,6 +21,7 @@
   </div>
   {!! $errors->first('name', '<span class="help-inline">:message</span>') !!}
 </div>
+
 <div class="form-group {{ $errors->has('renter_id') ? 'has-error' : ''}}">
   {!! Form::label('renter_id', 'Renter', array('class' => 'col-md-2 control-label')) !!}
   <div class="col-md-10">
@@ -26,3 +36,4 @@
   </div>
   {!! $errors->first('bill_amount', '<span class="help-inline">:message</span>') !!}
 </div>
+

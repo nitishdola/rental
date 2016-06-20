@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Bill extends Model
 {
-    protected $fillable = array('bill_type', 'renter_id', 'rent_amount', 'bill_amount', 'monthyear');
+    protected $fillable = array('bill_type_id', 'renter_id', 'rent_amount', 'bill_amount', 'monthyear');
 	protected $table    = 'bills';
     protected $guarded  = ['_token'];
 
@@ -20,4 +20,9 @@ class Bill extends Model
 	{
 		return $this->belongsTo('App\Renter', 'renter_id');
 	}
+
+    public function bill_type() 
+    {
+        return $this->belongsTo('App\BillType', 'bill_type_id');
+    }
 }

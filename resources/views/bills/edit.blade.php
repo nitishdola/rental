@@ -31,5 +31,37 @@ $('.monthpicker').datepicker({
 });
 
 $('.select2').select2();
+
+$('#bill_type_id').change(function() {
+  if($(this).val() == 1) {
+    $('#number_of_electricity_unit_div').fadeIn();
+  }else{
+    $('#number_of_electricity_unit_div').fadeOut();
+  }
+});
+
+$('#number_of_electricity_unit').change(function() {
+	var number_of_units = $(this).val();
+
+	var data = '';
+	var url = '';
+
+	data += '&number_of_units='+number_of_units;
+	url += '{{ route("electricity_units.cost")}}';
+
+	$.ajax({
+		data: data,
+		type: 'get',
+		url : url,
+
+		error : function(resp) {
+			console.log(resp);
+		},
+		success : function(resp) {
+			$('#bill_amount').val(resp);
+		}
+	});	
+});
+
 </script>
 @stop

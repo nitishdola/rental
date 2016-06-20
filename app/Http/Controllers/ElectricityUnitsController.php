@@ -61,4 +61,30 @@ class ElectricityUnitsController extends Controller
         $message = 'Unit Removed !';
         return Redirect::route('electricity_units.index')->with('message', $message);
     }
+
+    public function get_cost() {
+        if(isset($_GET['number_of_units'])) {
+            $units =  $_GET['number_of_units'];
+
+            return $this->get_unit_cost($units)*$units;
+        }
+    }
+
+    private function get_unit_cost($units) {
+        $e_units = ElectricityUnit::get();
+
+        foreach($e_units as $k => $v) {
+            $unit_range = $v->unit_range;
+            $unit_arr = explode('-', $unit_range);
+
+            if($unit_arr[1] != '') {
+                if($units >= $unit_arr[0]  && $units <= $unit_arr[1] ) {
+                    return $v->cost;
+                }
+            }else{
+                return $v->cost;
+            }
+           
+        }
+    }
 }

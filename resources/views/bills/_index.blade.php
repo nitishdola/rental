@@ -47,7 +47,7 @@
             <td> {{ (($results->currentPage() - 1 ) * $results->perPage() ) + $count + $k }} </td>
             <td> {{ date('F , Y', strtotime($v->monthyear)) }}</td>
             <td> {{ $v->renter['name'] }}</td>
-            <td class="hidden-xs"> {{ $v->bill_type }} </td>
+            <td class="hidden-xs"> {{ $v->bill_type['name'] }} </td>
             <td> {{ $v->bill_amount }} </td>
             
 

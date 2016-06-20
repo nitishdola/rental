@@ -8,18 +8,19 @@ use App\Http\Requests;
 
 use DB, Validator, Redirect;
 
-use App\Bill, App\Renter, App\Unit, App\RenterUnit, App\BillPayment;
+use App\Bill, App\Renter, App\Unit, App\RenterUnit, App\BillPayment,App\BillType, App\ElectricityUnit;
 
 class BillsController extends Controller
 {
     public function index() {
-        $results = Bill::with('renter')->orderBy('created_at', 'DESC')->paginate(20);
+        $results = Bill::with('renter', 'bill_type')->orderBy('created_at', 'DESC')->paginate(20);
     	return view('bills.index', compact('results'));
     }
 
     public function create() {
-    	$renters = Renter::orderBy('name')->lists('name', 'id')->toArray();
-    	return view('bills.create', compact('renters'));
+        $bill_types = BillType::orderBy('name')->lists('name', 'id')->toArray();
+    	$renters    = Renter::orderBy('name')->lists('name', 'id')->toArray();
+    	return view('bills.create', compact('renters', 'bill_types'));
     }
 
     public function view( $id ) {
@@ -62,10 +63,11 @@ class BillsController extends Controller
     }
 
     public function edit($id) {
+        $bill_types = BillType::orderBy('name')->lists('name', 'id')->toArray();
         $renters = Renter::orderBy('name')->lists('name', 'id')->toArray();
         $bill    = Bill::findOrFail($id);
         $bill['monthyear'] = date('m-Y', strtotime($bill->monthyear));
-        return view('bills.edit', compact('renters', 'bill'));
+        return view('bills.edit', compact('renters', 'bill', 'bill_types'));
     }
 
     public function update(Request $request, $id ) {
