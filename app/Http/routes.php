@@ -189,3 +189,43 @@ Route::group(['prefix'=>'bill-payments'], function() {
         'uses' => 'BillPaymentsController@generate_bill'
     ]);
 });
+
+
+Route::group(['prefix'=>'electricity-unit'], function() {
+    Route::get('/create', [
+        'as' => 'electricity_units.create',
+        'middleware' => ['admin'],
+        'uses' => 'ElectricityUnitsController@create'
+    ]);
+
+    Route::post('/store', [
+        'as' => 'electricity_units.store',
+        'middleware' => 'admin',
+        'uses' => 'ElectricityUnitsController@store'
+    ]);
+
+
+    Route::get('/view-all', [
+        'as' => 'electricity_units.index',
+        'middleware' => 'admin',
+        'uses' => 'ElectricityUnitsController@index'
+    ]);
+
+    Route::get('/edit/{num}', [
+        'as' => 'electricity_units.edit',
+        'middleware' => 'admin',
+        'uses' => 'ElectricityUnitsController@edit'
+    ]);
+
+    Route::post('/update/{num}', [
+        'as' => 'electricity_units.update',
+        'middleware' => 'admin',
+        'uses' => 'ElectricityUnitsController@update'
+    ]);
+
+    Route::get('/disable/{num}', [
+        'as' => 'electricity_units.disable',
+        'middleware' => 'admin',
+        'uses' => 'ElectricityUnitsController@delete'
+    ]);
+});

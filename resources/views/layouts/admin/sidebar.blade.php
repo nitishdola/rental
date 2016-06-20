@@ -86,6 +86,28 @@
             <span class="fa arrow-right"></span>
         </a>
     </li>
+
+    <li>
+        <a href="#">
+            <i class="livicon" data-name="brush" data-c="#F89A14" data-hc="#F89A14" data-size="18" data-loop="true"></i>
+            <span class="title">Electricity Units</span>
+            <span class="fa arrow"></span>
+        </a>
+        <ul class="sub-menu">
+            <li>
+                <a href="{{ route('electricity_units.create')}}">
+                    <i class="fa fa-angle-double-right"></i>
+                    Add 
+                </a>
+            </li>
+            <li>
+                <a href="{{ route('electricity_units.index') }}">
+                    <i class="fa fa-angle-double-right"></i>
+                    View 
+                </a>
+            </li>
+        </ul>
+    </li>
     
 </ul>
 <!-- END SIDEBAR MENU -->
