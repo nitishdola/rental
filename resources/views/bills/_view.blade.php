@@ -7,6 +7,9 @@
     #prnt {
      display:block;
     }
+    .pending_amount {
+        display: none;
+    }
 }
 </style>
 <div id="prnt">
@@ -32,7 +35,7 @@
 
 <div class="row">
     @if($bill_details)
-	<table class="table table-striped table-hover">
+	<table class="table">
 	    <thead>
 	        <tr>
 	            <th>Bill Type</th>
@@ -54,19 +57,38 @@
 	    	<?php $other_bill_amount += $v->bill_amount; ?>
 	    	@endforeach
 
+            <?php $pending_bill = 0; ?>
+            @if(count($previous_bills))
+            @foreach($previous_bills as $k2 => $v2)
+
+            <?php $pending_bill += $v2->total_payble; ?>
+            <tr class="warning" id="P_{{$v2->id}}">
+                <td> Pending Bill {{ date('F,Y', strtotime($v2->monthyear)) }} </td>
+                <td> <span id="PBA_{{$v2->id}}">{{ number_format($v2->total_payble,2,".",",") }}</span> 
+                    <a href="javascript:void();" class="pending_amount" onclick="removePending({{$v2->id}});">X</a>
+                </td>
+            </tr>
+            @endforeach
+            @endif
 	    	<tr style="font-weight:bold">
-	    		<td> Total Bill </td>
-	    		<td> {{ number_format($bill_details->total_payble,2,".",",") }} </td>
+	    		<td> Total Bill for {{ date('F, Y', strtotime($monthyear)) }}</td>
+	    		<td id="total_final_bill"> {{ number_format($bill_details->total_payble + $pending_bill ,2,".",",") }} </td>
 	    	</tr>
+
 	    </tbody>
 	</table>
-</div>
 </div>
 <div class="portlet box danger" id="other-btn">
         <div class="portlet-body">
         		@if($bill_details->paid == 'no')
                 {!! Form::open(array('route' => 'bill.pay', 'id' => 'bill_pay', 'class' => 'form-horizontal row-border')) !!}
-                    {!! Form::hidden('bill_payment_id', $bill_details->id) !!}
+                    {!! Form::hidden('bill_payment_id[]', $bill_details->id) !!}
+
+                    @foreach($previous_bills as $k21 => $v21)
+
+                    {!! Form::hidden('bill_payment_id[]', $v21->id, ['id'=> 'pending_id_'.$v21->id]) !!}
+                    @endforeach
+
                     {!! Form:: submit('PAY BILL', ['class' => 'btn btn-success']) !!}
                 {!!form::close()!!}
                 @else
@@ -83,6 +105,25 @@ Bill not yet generated
 
 @section('pageSpecificScripts')
 <script type="text/javascript">
+    function removePending(id) {
+      $('#P_'+id).hide();
+      $('#pending_id_'+id).attr('disabled', 'disabled');
+      
+
+      var total_final_bill = 0;
+      total_final_bill = $('#total_final_bill').text();
+      total_final_bill = parseInt(total_final_bill.replace(/,/g, ''), 10);
+
+      var pending_bill_amount = 0;
+      pending_bill_amount = $('#PBA_'+id).text();
+      pending_bill_amount = parseInt(pending_bill_amount.replace(/,/g, ''), 10); 
+
+      var bill_amount = 0;
+      bill_amount = parseInt(total_final_bill - pending_bill_amount);
+      bill_amount = bill_amount.toFixed(2);
+      $('#total_final_bill').text(bill_amount);
+    }
+
 
     function PrintElem(elem)
     {

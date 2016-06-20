@@ -65,6 +65,8 @@ class BillPaymentsController extends Controller
 
     public function make_payment(Request $request) {
 
+        dd($request);
+
     	$bill_payment = BillPayment::findOrFail($request->bill_payment_id);
 
         $bill_payment->paid = 'yes';

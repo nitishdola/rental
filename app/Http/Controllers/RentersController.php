@@ -112,7 +112,9 @@ class RentersController extends Controller
 
         $other_bills = Bill::where(['renter_id' => $renter_id, 'monthyear' => $monthyear.'-01'])->get();
 
-        return view('bills.view', compact('bill_details', 'renterInfo', 'monthyear', 'other_bills'));
+        $previous_bills = BillPayment::where('monthyear', '<', $monthyear.'-1')->where('paid', 'no')->get();
+
+        return view('bills.view', compact('bill_details', 'renterInfo', 'monthyear', 'other_bills', 'previous_bills'));
     }
 
     public function view_previous_bill( $renter_id ) {
