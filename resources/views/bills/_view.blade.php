@@ -51,7 +51,7 @@
             <?php $other_bill_amount = 0; ?>
 	    	@foreach($other_bills as $k => $v)
 	    	<tr>
-	    		<td> {{ ucfirst($v->bill_type) }} </td>
+	    		<td> {{ ucfirst($v->bill_type['name']) }} </td>
 	    		<td> {{ $v->bill_amount }} </td>
 	    	</tr>
 	    	<?php $other_bill_amount += $v->bill_amount; ?>

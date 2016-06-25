@@ -18,7 +18,7 @@
             <th>
                 Number of units allocated
             </th>
-            <th> View Previous Bills</th>
+            <th> View Electricity Bills</th>
         </tr>
     </thead>
     <tbody>
@@ -32,7 +32,7 @@
             <td> <a href="#" title="View Units" onclick="showUnits({{$v->id}}, event)"> {{ count($v->renter_unit) }}</a> 
             <span id="units_{{$v->id}}"></span>
             </td>
-            <td> <a href="{{ route('renter.view_previous_bill', $v->id) }}"> View All Bills </a>
+            <td> <a href="{{ route('electricity.all_bills', $v->id) }}"> View </a>
             <td> <a href=" {{ route('renter.view_bill', $v->id) }}">
                     <i class="fa fa-eye"></i> View Bill for {{ date('M Y')}}
                 </a> 

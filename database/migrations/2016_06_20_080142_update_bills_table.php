@@ -14,6 +14,7 @@ class UpdateBillsTable extends Migration
     {
         Schema::table('bills', function (Blueprint $table) {
             $table->integer('number_of_electricity_unit')->nullable();
+            $table->enum('paid', array('paid', 'unpaid'))->default('unpaid');
         });
     }
 

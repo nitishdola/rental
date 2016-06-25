@@ -95,4 +95,9 @@ class BillsController extends Controller
         $message = 'Bill Removed !';
         return Redirect::route('bill.index')->with('message', $message);
     }
+
+    public function all_electricity_bills($renter_id) {
+        $results = Bill::where(['renter_id' => $renter_id, 'paid' => 'unpaid'])->get();
+        dd($results);
+    }
 }

@@ -173,6 +173,11 @@ Route::group(['prefix'=>'bill'], function() {
         'middleware' => 'admin',
         'uses' => 'BillPaymentsController@report_search_result'
     ]);
+    Route::get('/electricity/all/{renter_id}', [
+        'as' => 'electricity.all_bills',
+        'middleware' => 'admin',
+        'uses' => 'BillsController@all_electricity_bills'
+    ]);
 });
 
 

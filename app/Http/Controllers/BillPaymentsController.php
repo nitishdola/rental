@@ -114,4 +114,6 @@ class BillPaymentsController extends Controller
         $results = BillPayment::where($matchThese)->where('monthyear', '>=', $from)->where('monthyear', '<=', $to)->with('renter')->paginate(50);
     	return view('bill_payments.report_search_result', compact('results'));
     }
+
+    
 }
