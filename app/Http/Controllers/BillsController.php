@@ -97,7 +97,35 @@ class BillsController extends Controller
     }
 
     public function all_electricity_bills($renter_id) {
-        $results = Bill::where(['renter_id' => $renter_id, 'paid' => 'unpaid'])->get();
-        dd($results);
+        $renterInfo = Renter::findOrFail($renter_id);
+        $results = Bill::where(['bill_type_id' => 1, 'renter_id' => $renter_id, 'paid' => 'unpaid'])->get();
+        return view('bills.all_electricity_bills', compact('results', 'renterInfo'));
+    }
+
+    public function electricity_bill_pay(Request $request) {
+        $ids = $request->bill_ids;
+        if(!empty($ids)) {
+            foreach($ids as $k => $v) {
+               $bill = BIll::findOrFail($v); 
+               $bill->paid = 'paid';
+               $bill->save();
+            }
+        }
+        $message = 'Bill Paid successfully';
+        return Redirect::route('electricity.receipt', json_encode($ids))->with('message', $message);
+    }   
+
+    public function electricity_bill_receipt($ids) {
+        $bill_receipt = [];
+        if(!empty(json_decode($ids))) {
+            foreach(json_decode($ids) as $k => $v) {
+               $bill = BIll::findOrFail($v);
+               $bill_receipt[$k]['monthyear'] = $bill->monthyear;
+               $bill_receipt[$k]['bill_amount'] = $bill->bill_amount;
+               $renter_id = $bill->renter_id;
+            }
+        }
+        $renterInfo = Renter::findOrFail($renter_id);
+        return view('bills.electricity_bill_receipt', compact('bill_receipt', 'renterInfo'));
     }
 }

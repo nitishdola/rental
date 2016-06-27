@@ -177,7 +177,17 @@ Route::group(['prefix'=>'bill'], function() {
         'as' => 'electricity.all_bills',
         'middleware' => 'admin',
         'uses' => 'BillsController@all_electricity_bills'
+    ]); 
+    Route::post('/electricity/bill/pay', [
+        'as' => 'electricity_bill.pay',
+        'middleware' => 'admin',
+        'uses' => 'BillsController@electricity_bill_pay'
     ]);
+     Route::get('/electricity/receipt/{ids}', [
+        'as' => 'electricity.receipt',
+        'middleware' => 'admin',
+        'uses' => 'BillsController@electricity_bill_receipt'
+    ]); 
 });
 
 
