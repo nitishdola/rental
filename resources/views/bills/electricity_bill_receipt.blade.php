@@ -10,7 +10,7 @@
                 @if(count($bill_receipt))
                     <style>
                     @media print {
-                        .header, .left-side, .content-header,#other-btn {
+                        .header,.alert_msg, .print_button, .left-side, .content-header,#other-btn {
                          display:none;
                         }
 
@@ -69,6 +69,8 @@
                         @endif
                     </div>
 
+                    <button class="btn btn-success print_button" onclick="window.print()"><span class="glyphicon glyphicon-print"></span> PRINT </button>
+
                 @else
                     <div class="alert alert-danger fade in">
                         <a href="#" class="close" data-dismiss="alert">&times;</a>
@@ -79,4 +81,34 @@
         </div>
     </div>
 </div>
+@stop
+
+@section('pageSpecificScripts')
+<script type="text/javascript">
+
+    function PrintElem(elem)
+    {
+       Popup($(elem).html());
+    }
+
+    function Popup(data) 
+    {
+        var mywindow = window.open('', 'my div', 'height=400,width=600');
+        mywindow.document.write('<html><head><title>Tender</title>');
+        /*optional stylesheet*/ 
+        mywindow.document.write('<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" type="text/css" />');
+        mywindow.document.write('</head><body >');
+        mywindow.document.write(data);
+        mywindow.document.write('</body></html>');
+
+        mywindow.document.close(); // necessary for IE >= 10
+        mywindow.focus(); // necessary for IE >= 10
+
+        mywindow.print();
+        mywindow.close();
+
+        return true;
+    }
+
+</script>
 @stop

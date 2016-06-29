@@ -13,7 +13,7 @@ use App\Bill, App\Renter, App\Unit, App\RenterUnit, App\BillPayment,App\BillType
 class BillsController extends Controller
 {
     public function index() {
-        $results = Bill::with('renter', 'bill_type')->orderBy('created_at', 'DESC')->paginate(20);
+        $results = Bill::with('renter')->with('bill_type')->orderBy('created_at', 'DESC')->paginate(20);
     	return view('bills.index', compact('results'));
     }
 
