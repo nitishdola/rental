@@ -203,6 +203,35 @@ Route::group(['prefix'=>'bill-payments'], function() {
         'middleware' => ['admin'],
         'uses' => 'BillPaymentsController@generate_bill'
     ]);
+
+    Route::get('/electricity-bill/view-renters', [
+        'as' => 'bill_payment.electricity.view_renters',
+        'middleware' => ['admin'],
+        'uses' => 'BillPaymentsController@electricity_bill_view_renters'
+    ]);
+    Route::post('/electricity-bill/view-electricity-bill', [
+        'as' => 'bill_payment.electricity_bill_pay',
+        'middleware' => ['admin'],
+        'uses' => 'BillPaymentsController@electricity_bill_pay'
+    ]);
+
+
+    Route::get('/rent-bill/view-renters', [
+        'as' => 'bill_payment.rent.view_renters',
+        'middleware' => ['admin'],
+        'uses' => 'BillPaymentsController@rent_bill_view_renters'
+    ]);
+    Route::post('/rent-bill/view-renters-bill', [
+        'as' => 'bill_payment.rent_bill_pay',
+        'middleware' => ['admin'],
+        'uses' => 'BillPaymentsController@rent_bill_pay'
+    ]);
+
+    Route::get('/create-bill', [
+        'as' => 'bill_payment.create',
+        'middleware' => ['admin'],
+        'uses' => 'BillPaymentsController@create_bill'
+    ]);
 });
 
 

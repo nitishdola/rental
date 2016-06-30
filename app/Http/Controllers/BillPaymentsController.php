@@ -33,7 +33,7 @@ class BillPaymentsController extends Controller
         for($i = 0; $i < count($request->renters); $i++) {
             $renter_id = $request->renters[$i];
 
-            $bills = Bill::where(['renter_id' => $renter_id, 'monthyear' => $monthyear.'-1'])->get();
+            $bills = Bill::where(['paid' => 'unpaid', 'renter_id' => $renter_id, 'monthyear' => $monthyear.'-1'])->where('bill_type_id' , '!=', 1)->get();
             
             $additional_bill = 0;
             foreach($bills as $k1 => $v1) {
@@ -79,7 +79,7 @@ class BillPaymentsController extends Controller
                 $success_bill++;
             }
         }
-        $message    .= $success_bill'. Bill paid successfully !';
+        $message    .= $success_bill.' Bill paid successfully !';
         return Redirect::route('renter.view_bill', $bill_payment->renter_id)->with('message', $message);
     }
 
@@ -115,5 +115,24 @@ class BillPaymentsController extends Controller
     	return view('bill_payments.report_search_result', compact('results'));
     }
 
+    public function electricity_bill_view_renters() {
+        $renters = Renter::orderBy('name')->lists('name', 'id')->toArray();
+        return view('bill_payments.electricity_bill_view_renters', compact('renters'));
+    }
+
+    public function electricity_bill_pay(Request $request) {
+        $renter_id = $request->renter_id;
+        return Redirect::route('electricity.all_bills', $renter_id);
+    }
+
+    public function rent_bill_view_renters() {
+        $renters = Renter::orderBy('name')->lists('name', 'id')->toArray();
+        return view('bill_payments.rent_bill_view_renters', compact('renters'));
+    }
+
+    public function rent_bill_pay(Request $request) {
+        $renter_id = $request->renter_id;
+        return Redirect::route('renter.view_bill', $renter_id);
+    }
     
 }

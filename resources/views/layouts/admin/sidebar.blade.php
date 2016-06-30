@@ -7,6 +7,70 @@
             <span class="title">Dashboard</span>
         </a>
     </li>
+
+    <li>
+        <a href="#">
+            <i class="livicon" data-name="brush" data-c="#F89A14" data-hc="#F89A14" data-size="18" data-loop="true"></i>
+            <span class="title">Bill</span>
+            <span class="fa arrow"></span>
+        </a>
+        <ul class="sub-menu">
+            <li>
+                <a href="{{ route('bill.create')}}">
+                    <i class="fa fa-angle-double-right"></i>
+                    Add Bills
+                </a>
+            </li>
+            <li>
+                <a href="{{ route('bill.index') }}">
+                    <i class="fa fa-angle-double-right"></i>
+                    View Bills
+                </a>
+            </li>
+        </ul>
+    </li>
+
+    <li>
+        <a href=" {{ route('bill_payment.create') }}">
+            <i class="livicon" data-name="map" data-c="#F89A55" data-hc="#F89A55" data-size="18" data-loop="true"></i>
+            <span class="title">Generate bill</span>
+            <span class="fa arrow-right"></span>
+        </a>
+    </li>
+
+    <li>
+         <a href="#">
+            <i class="livicon" data-name="brush" data-c="#F89A14" data-hc="#F89A14" data-size="18" data-loop="true"></i>
+            <span class="title">Bill Payment</span>
+            <span class="fa arrow"></span>
+        </a>
+        <ul class="sub-menu">
+            <li>
+                <a href="{{ route('bill_payment.rent.view_renters')}}">
+                    <i class="fa fa-angle-double-right"></i>
+                    Pay Rent Bill
+                </a>
+            </li>
+
+            <li>
+                <a href="{{ route('bill_payment.electricity.view_renters')}}">
+                    <i class="fa fa-angle-double-right"></i>
+                    Pay Electricity Bill
+                </a>
+            </li>
+
+            <li>
+                <a href=" {{ route('bill.report_search') }}">
+                    <i class="livicon" data-name="barchart" data-c="#F89A55" data-hc="#F89A55" data-size="18" data-loop="true"></i>
+                    <span class="title">Bill Payment Report</span>
+                    <span class="fa arrow-right"></span>
+                </a>
+            </li>
+
+        </ul>
+        
+    </li>
+    <hr>
     <li>
         <a href="#">
             <i class="livicon" data-name="medal" data-size="18" data-c="#00bc8c" data-hc="#00bc8c" data-loop="true"></i>
@@ -49,43 +113,6 @@
             </li>
         </ul>
     </li>
-    <li>
-        <a href="#">
-            <i class="livicon" data-name="brush" data-c="#F89A14" data-hc="#F89A14" data-size="18" data-loop="true"></i>
-            <span class="title">Bill</span>
-            <span class="fa arrow"></span>
-        </a>
-        <ul class="sub-menu">
-            <li>
-                <a href="{{ route('bill.create')}}">
-                    <i class="fa fa-angle-double-right"></i>
-                    Add Bills
-                </a>
-            </li>
-            <li>
-                <a href="{{ route('bill.index') }}">
-                    <i class="fa fa-angle-double-right"></i>
-                    View Bills
-                </a>
-            </li>
-        </ul>
-    </li>
-
-    <li>
-        <a href=" {{ route('bill_payment.create') }}">
-            <i class="livicon" data-name="map" data-c="#F89A55" data-hc="#F89A55" data-size="18" data-loop="true"></i>
-            <span class="title">Generate bill</span>
-            <span class="fa arrow-right"></span>
-        </a>
-    </li>
-
-    <li>
-        <a href=" {{ route('bill.report_search') }}">
-            <i class="livicon" data-name="barchart" data-c="#F89A55" data-hc="#F89A55" data-size="18" data-loop="true"></i>
-            <span class="title">Bill Payment Report</span>
-            <span class="fa arrow-right"></span>
-        </a>
-    </li>
 
     <li>
         <a href="#">
@@ -108,6 +135,9 @@
             </li>
         </ul>
     </li>
+    
+
+    
     
 </ul>
 <!-- END SIDEBAR MENU -->

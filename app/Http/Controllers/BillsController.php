@@ -47,11 +47,15 @@ class BillsController extends Controller
     }
 
     public function store(Request $request ) {
+        
     	$validator = Validator::make($data = $request->all(), Bill::$rules);
         if ($validator->fails()) return Redirect::back()->withErrors($validator)->withInput();
+        //dd($request);
+        $data['period_from'] = date('Y-m-d', strtotime( $data['period_from'] ));
+        $data['period_to'] = date('Y-m-d', strtotime( $data['period_to'] ));
 
-        $data['monthyear'] = '01-'.$request->monthyear;
-        $data['monthyear'] = date('Y-m-d', strtotime( $data['monthyear'] ));
+        $data['bill_amount'] = ElectricityUnit::get_unit_cost($request->current_meter_reading-$request->previous_meter_reading);
+
     	$message = '';
     	if($bill = Bill::create($data)) {
             	$message .= 'Bill added successfully !';

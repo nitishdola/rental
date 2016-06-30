@@ -25,6 +25,8 @@
     <link rel="stylesheet" media="all" href="{{ asset('vendors/jvectormap/jquery-jvectormap.css') }}" />
     <link rel="stylesheet" href="{{ asset('vendors/animate/animate.min.css') }}">
     <link rel="stylesheet" href="{{ asset('css/only_dashboard.css') }}" />
+
+    <link rel="stylesheet" href="{{ asset('zebra/css/default.css') }}" />
     <!--end of page level css-->
     @yield('pageCss')
 </head>
@@ -105,8 +107,14 @@
     <!--   maps -->
     <script src="{{ asset('vendors/jvectormap/jquery-jvectormap-1.2.2.min.js') }}"></script>
     <script src="{{ asset('vendors/jvectormap/jquery-jvectormap-world-mill-en.js') }}"></script>
-     <script src="{{ asset('vendors/jscharts/Chart.js') }}"></script>
+    <script src="{{ asset('vendors/jscharts/Chart.js') }}"></script>
     <script src="{{ asset('js/dashboard.js') }}" type="text/javascript"></script>
+    <script src="{{ asset('zebra/javascript/zebra_datepicker.js') }}" type="text/javascript"></script>
+    <script>
+    $(document).ready(function() {
+        $('input.datepicker').Zebra_DatePicker({ format : 'd-m-Y'});
+     });
+     </script>
     @yield('pageJs')
     
     @yield('pageSpecificScripts')

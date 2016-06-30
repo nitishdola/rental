@@ -14,11 +14,15 @@ class CreateBillsTable extends Migration
     {
         Schema::create('bills', function (Blueprint $table) {
             $table->increments('id');
-            $table->text('bill_type_id');
-            $table->date('monthyear')->description('Only month and Year will be extracted from this field');
-            $table->integer('renter_id');
+            $table->integer('bill_type_id', false, true);
+            $table->date('period_from')->description('Eletricity Meter Period From');
+            $table->date('period_to')->description('Eletricity Meter Period To');
+            $table->integer('renter_id', false, true);
             $table->decimal('bill_amount', 10, 2);
             $table->timestamps();
+
+            $table->foreign('bill_type_id')->references('id')->on('bill_types');
+            $table->foreign('renter_id')->references('id')->on('renters');
         });
     }
 
