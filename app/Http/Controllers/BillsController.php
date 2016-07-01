@@ -144,7 +144,7 @@ class BillsController extends Controller
                $bill_receipt[$k]['bill_amount'] = $bill->bill_amount;
                $bill_receipt[$k]['period_from'] = date('d-m-Y', strtotime($bill->period_from));
                $bill_receipt[$k]['period_to']   = date('d-m-Y', strtotime($bill->period_to));
-               $bill_receipt[$k]['unit_cost']   = ElectricityUnit::get_unit_cost($bill->current_meter_reading-$bill->previous_meter_reading);
+               $bill_receipt[$k]['unit_cost']   = ElectricityUnit::get_unit_price($bill->current_meter_reading-$bill->previous_meter_reading);
 
                $bill_receipt[$k]['bill_words']  = BillPayment::convertNumber($bill->bill_amount) ;
 
