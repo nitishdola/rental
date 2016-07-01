@@ -161,13 +161,13 @@ class BillPaymentsController extends Controller
             
             $bill[$k]['renter_name'] = $v->name;
             //rent bill
-            $rent_bills = BillPayment::where('paid', 'no')->get();
+            $rent_bills = BillPayment::where('paid', 'no')->where('renter_id', $v->id)->get();
             foreach($rent_bills as $kr => $vr) {
                 $bill[$k]['bill_info'][$kr]['rent_bill'] = $vr->total_payble;
             }
 
             //electricity bill
-            $electricity_bills = Bill::where('paid', 'unpaid')->get();
+            $electricity_bills = Bill::where('paid', 'unpaid')->where('renter_id', $v->id)->get();
             foreach($electricity_bills as $ke => $ve) {
                 $bill[$k]['bill_info'][$ke]['electricity_bill'] = $ve->bill_amount;
             }
