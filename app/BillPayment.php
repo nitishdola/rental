@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class BillPayment extends Model
 {
-    protected $fillable = array('renter_id', 'rent', 'total_payble', 'pay_date', 'paid', 'monthyear');
+    protected $fillable = array('renter_id', 'rent', 'total_payble', 'pay_date', 'paid', 'monthyear', 'cheque_number', 'cheque_date');
 	protected $table    = 'bill_payments';
     protected $guarded  = ['_token'];
 
@@ -24,103 +24,229 @@ class BillPayment extends Model
     } 
 
 
-    public static function trim_all( $str , $what = NULL , $with = ' ' )
+    public static function convertNumber($number)
     {
-        if( $what === NULL )
+        //return $number;
+        list($integer, $fraction) = explode(".", (string) $number);
+
+        $output = "";
+
+        if ($integer{0} == "-")
         {
-            //  Character      Decimal      Use
-            //  "\0"            0           Null Character
-            //  "\t"            9           Tab
-            //  "\n"           10           New line
-            //  "\x0B"         11           Vertical Tab
-            //  "\r"           13           New Line in Mac
-            //  " "            32           Space
-           
-            $what   = "\\x00-\\x20";    //all white-spaces and control chars
+            $output = "negative ";
+            $integer    = ltrim($integer, "-");
         }
-       
-        return trim( preg_replace( "/[".$what."]+/" , $with , $str ) , $what );
+        else if ($integer{0} == "+")
+        {
+            $output = "positive ";
+            $integer    = ltrim($integer, "+");
+        }
+
+        if ($integer{0} == "0")
+        {
+            $output .= "zero";
+        }
+        else
+        {
+            $integer = str_pad($integer, 36, "0", STR_PAD_LEFT);
+            $group   = rtrim(chunk_split($integer, 3, " "), " ");
+            $groups  = explode(" ", $group);
+
+            $groups2 = array();
+            foreach ($groups as $g)
+            {
+                $groups2[] = BillPayment::convertThreeDigit($g{0}, $g{1}, $g{2});
+            }
+
+            for ($z = 0; $z < count($groups2); $z++)
+            {
+                if ($groups2[$z] != "")
+                {
+                    $output .= $groups2[$z] . BillPayment::convertGroup(11 - $z) . (
+                            $z < 11
+                            && !array_search('', array_slice($groups2, $z + 1, -1))
+                            && $groups2[11] != ''
+                            && $groups[11]{0} == '0'
+                                ? " and "
+                                : ", "
+                        );
+                }
+            }
+
+            $output = rtrim($output, ", ");
+        }
+
+        if ($fraction > 0)
+        {
+            $output .= " point";
+            for ($i = 0; $i < strlen($fraction); $i++)
+            {
+                $output .= " " . BillPayment::convertDigit($fraction{$i});
+            }
+        }
+
+        return $output;
     }
 
-
-    public static function number_to_word( $num = '' )
+    public static function convertGroup($index)
     {
-        $num    = ( string ) ( ( int ) $num );
-       
-        if( ( int ) ( $num ) && ctype_digit( $num ) )
+        switch ($index)
         {
-            $words  = array( );
-           
-            $num    = str_replace( array( ',' , ' ' ) , '' , trim( $num ) );
-           
-            $list1  = array('','one','two','three','four','five','six','seven',
-                'eight','nine','ten','eleven','twelve','thirteen','fourteen',
-                'fifteen','sixteen','seventeen','eighteen','nineteen');
-           
-            $list2  = array('','ten','twenty','thirty','forty','fifty','sixty',
-                'seventy','eighty','ninety','hundred');
-           
-            $list3  = array('','thousand','million','billion','trillion',
-                'quadrillion','quintillion','sextillion','septillion',
-                'octillion','nonillion','decillion','undecillion',
-                'duodecillion','tredecillion','quattuordecillion',
-                'quindecillion','sexdecillion','septendecillion',
-                'octodecillion','novemdecillion','vigintillion');
-           
-            $num_length = strlen( $num );
-            $levels = ( int ) ( ( $num_length + 2 ) / 3 );
-            $max_length = $levels * 3;
-            $num    = substr( '00'.$num , -$max_length );
-            $num_levels = str_split( $num , 3 );
-           
-            foreach( $num_levels as $num_part )
-            {
-                $levels--;
-                $hundreds   = ( int ) ( $num_part / 100 );
-                $hundreds   = ( $hundreds ? ' ' . $list1[$hundreds] . ' Hundred' . ( $hundreds == 1 ? '' : 's' ) . ' ' : '' );
-                $tens       = ( int ) ( $num_part % 100 );
-                $singles    = '';
-               
-                if( $tens < 20 )
-                {
-                    $tens   = ( $tens ? ' ' . $list1[$tens] . ' ' : '' );
-                }
-                else
-                {
-                    $tens   = ( int ) ( $tens / 10 );
-                    $tens   = ' ' . $list2[$tens] . ' ';
-                    $singles    = ( int ) ( $num_part % 10 );
-                    $singles    = ' ' . $list1[$singles] . ' ';
-                }
-                $words[]    = $hundreds . $tens . $singles . ( ( $levels && ( int ) ( $num_part ) ) ? ' ' . $list3[$levels] . ' ' : '' );
-            }
-           
-            $commas = count( $words );
-           
-            if( $commas > 1 )
-            {
-                $commas = $commas - 1;
-            }
-           
-            $words  = implode( ', ' , $words );
-           
-            //Some Finishing Touch
-            //Replacing multiples of spaces with one space
-
-
-            $words  = trim( str_replace( ' ,' , ',' , BillPayment::trim_all( ucwords( $words ) ) ) , ', ' );
-            if( $commas )
-            {
-                $words  = str_replace_last( ',' , ' and' , $words );
-            }
-           
-            return $words;
+            case 11:
+                return " decillion";
+            case 10:
+                return " nonillion";
+            case 9:
+                return " octillion";
+            case 8:
+                return " septillion";
+            case 7:
+                return " sextillion";
+            case 6:
+                return " quintrillion";
+            case 5:
+                return " quadrillion";
+            case 4:
+                return " trillion";
+            case 3:
+                return " billion";
+            case 2:
+                return " million";
+            case 1:
+                return " thousand";
+            case 0:
+                return "";
         }
-        else if( ! ( ( int ) $num ) )
+    }
+
+    public static function convertThreeDigit($digit1, $digit2, $digit3)
+    {
+        $buffer = "";
+
+        if ($digit1 == "0" && $digit2 == "0" && $digit3 == "0")
         {
-            return 'Zero';
+            return "";
         }
-        return '';
+
+        if ($digit1 != "0")
+        {
+            $buffer .= BillPayment::convertDigit($digit1) . " hundred";
+            if ($digit2 != "0" || $digit3 != "0")
+            {
+                $buffer .= " and ";
+            }
+        }
+
+        if ($digit2 != "0")
+        {
+            $buffer .= BillPayment::convertTwoDigit($digit2, $digit3);
+        }
+        else if ($digit3 != "0")
+        {
+            $buffer .= BillPayment::convertDigit($digit3);
+        }
+
+        return $buffer;
+    }
+
+    public static function convertTwoDigit($digit1, $digit2)
+    {
+        if ($digit2 == "0")
+        {
+            switch ($digit1)
+            {
+                case "1":
+                    return "ten";
+                case "2":
+                    return "twenty";
+                case "3":
+                    return "thirty";
+                case "4":
+                    return "forty";
+                case "5":
+                    return "fifty";
+                case "6":
+                    return "sixty";
+                case "7":
+                    return "seventy";
+                case "8":
+                    return "eighty";
+                case "9":
+                    return "ninety";
+            }
+        } else if ($digit1 == "1")
+        {
+            switch ($digit2)
+            {
+                case "1":
+                    return "eleven";
+                case "2":
+                    return "twelve";
+                case "3":
+                    return "thirteen";
+                case "4":
+                    return "fourteen";
+                case "5":
+                    return "fifteen";
+                case "6":
+                    return "sixteen";
+                case "7":
+                    return "seventeen";
+                case "8":
+                    return "eighteen";
+                case "9":
+                    return "nineteen";
+            }
+        } else
+        {
+            $temp = BillPayment::convertDigit($digit2);
+            switch ($digit1)
+            {
+                case "2":
+                    return "twenty-$temp";
+                case "3":
+                    return "thirty-$temp";
+                case "4":
+                    return "forty-$temp";
+                case "5":
+                    return "fifty-$temp";
+                case "6":
+                    return "sixty-$temp";
+                case "7":
+                    return "seventy-$temp";
+                case "8":
+                    return "eighty-$temp";
+                case "9":
+                    return "ninety-$temp";
+            }
+        }
+    }
+
+    public static function convertDigit($digit)
+    {
+        switch ($digit)
+        {
+            case "0":
+                return "zero";
+            case "1":
+                return "one";
+            case "2":
+                return "two";
+            case "3":
+                return "three";
+            case "4":
+                return "four";
+            case "5":
+                return "five";
+            case "6":
+                return "six";
+            case "7":
+                return "seven";
+            case "8":
+                return "eight";
+            case "9":
+                return "nine";
+        }
     }
 
 }

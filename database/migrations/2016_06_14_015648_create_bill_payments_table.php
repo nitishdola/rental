@@ -20,6 +20,8 @@ class CreateBillPaymentsTable extends Migration
             $table->date('monthyear');
             $table->enum('paid', ['yes', 'no'])->default('no');
             $table->date('pay_date');
+            $table->string('cheque_number')->nullable();
+            $table->date('cheque_date')->nullable();
             $table->timestamps();
         });
     }

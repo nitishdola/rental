@@ -105,6 +105,8 @@ Route::group(['prefix'=>'renter'], function() {
         'uses' => 'RentersController@view_bill'
     ]);
 
+
+
     Route::get('/view-previous-bills/{num}', [
         'as' => 'renter.view_previous_bill',
         'middleware' => 'admin',
@@ -231,6 +233,18 @@ Route::group(['prefix'=>'bill-payments'], function() {
         'as' => 'bill_payment.create',
         'middleware' => ['admin'],
         'uses' => 'BillPaymentsController@create_bill'
+    ]);
+
+    Route::get('/view-rent-bill-receipt/{num}', [
+        'as' => 'renter.renter_bill_receipt',
+        'middleware' => 'admin',
+        'uses' => 'BillPaymentsController@renter_bill_receipt'
+    ]);
+
+    Route::get('/notification', [
+        'as' => 'renter.notification',
+        'middleware' => 'admin',
+        'uses' => 'BillPaymentsController@create_notification'
     ]);
 });
 

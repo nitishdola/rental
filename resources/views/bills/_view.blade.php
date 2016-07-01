@@ -48,15 +48,7 @@
 	    		<td> Rent </td>
 	    		<td> {{ number_format($bill_details->rent,2,".",",") }} </td>
 	    	</tr>
-            <?php $other_bill_amount = 0; ?>
-	    	@foreach($other_bills as $k => $v)
-	    	<tr>
-	    		<td> {{ ucfirst($v->bill_type['name']) }} </td>
-	    		<td> {{ $v->bill_amount }} </td>
-	    	</tr>
-	    	<?php $other_bill_amount += $v->bill_amount; ?>
-	    	@endforeach
-
+        
             <?php $pending_bill = 0; ?>
             @if(count($previous_bills))
             @foreach($previous_bills as $k2 => $v2)
@@ -89,13 +81,36 @@
                     {!! Form::hidden('bill_payment_id[]', $v21->id, ['id'=> 'pending_id_'.$v21->id]) !!}
                     @endforeach
 
+
+                     <input type="checkbox" value="check" id="paid_cheque"> Check if paid by cheque
+
+                     <br>
+                    
+                    <div id="cheque" style="display: none;">
+                        <div class="form-group {{ $errors->has('cheque_number') ? 'has-error' : ''}}">
+                          {!! Form::label('cheque_number', 'Cheque Number', array('class' => 'col-md-2 control-label')) !!}
+                          <div class="col-md-5">
+                            {!! Form::text('cheque_number', null, ['class' => 'form-control required', 'id' => 'cheque_number', 'placeholder' => 'Cheque Number (if applicable)','autocomplete' => 'off']) !!}
+                          </div>
+                          {!! $errors->first('cheque_number', '<span class="help-inline">:message</span>') !!}
+                        </div>
+
+                        <div class="form-group {{ $errors->has('period_from') ? 'has-error' : ''}}">
+                          {!! Form::label('cheque_date', 'Cheque Date', array('class' => 'col-md-2 control-label')) !!}
+                          <div class="col-md-9">
+                            {!! Form::text('cheque_date', date('Y-m-3',  strtotime("-1 month")), ['class' => 'datepicker form-control required', 'id' => 'cheque_date']) !!}
+                          </div>
+                          {!! $errors->first('cheque_date', '<span class="help-inline">:message</span>') !!}
+                        </div>
+                    </div>
+                    
+                    {!! Form::label('', '', array('class' => 'col-md-2 control-label')) !!}
                     {!! Form:: submit('PAY BILL', ['class' => 'btn btn-success']) !!}
                 {!!form::close()!!}
                 @else
                 	<button class="btn btn-info disabled"> BILL PAID </button>
                 @endif
         </div>
-        <button class="btn btn-success" onclick="window.print()"><span class="glyphicon glyphicon-print"></span> PRINT </button>
     </div>
 @else
 
@@ -125,29 +140,41 @@ Bill not yet generated
     }
 
 
-    function PrintElem(elem)
-    {
-       Popup($(elem).html());
-    }
+    $('#paid_cheque').click(function() {
+        if ($('#paid_cheque').is(':checked')) {
+        $('#cheque').fadeIn();
+        }else{
+            $('#cheque').fadeOut();
+        }
+    })
+    
 
-    function Popup(data) 
-    {
-        var mywindow = window.open('', 'my div', 'height=400,width=600');
-        mywindow.document.write('<html><head><title>Tender</title>');
-        /*optional stylesheet*/ 
-        mywindow.document.write('<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" type="text/css" />');
-        mywindow.document.write('</head><body >');
-        mywindow.document.write(data);
-        mywindow.document.write('</body></html>');
-
-        mywindow.document.close(); // necessary for IE >= 10
-        mywindow.focus(); // necessary for IE >= 10
-
-        mywindow.print();
-        mywindow.close();
-
-        return true;
-    }
 
 </script>
+@stop
+
+@section('pageCss')
+<style>
+.form-group input[type="checkbox"] {
+    display: none;
+}
+
+.form-group input[type="checkbox"] + .btn-group > label span {
+    width: 20px;
+}
+
+.form-group input[type="checkbox"] + .btn-group > label span:first-child {
+    display: none;
+}
+.form-group input[type="checkbox"] + .btn-group > label span:last-child {
+    display: inline-block;   
+}
+
+.form-group input[type="checkbox"]:checked + .btn-group > label span:first-child {
+    display: inline-block;
+}
+.form-group input[type="checkbox"]:checked + .btn-group > label span:last-child {
+    display: none;   
+}
+</style>
 @stop

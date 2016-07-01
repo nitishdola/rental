@@ -33,13 +33,7 @@ class BillPaymentsController extends Controller
         for($i = 0; $i < count($request->renters); $i++) {
             $renter_id = $request->renters[$i];
 
-            $bills = Bill::where(['paid' => 'unpaid', 'renter_id' => $renter_id, 'monthyear' => $monthyear.'-1'])->where('bill_type_id' , '!=', 1)->get();
-            
             $additional_bill = 0;
-            foreach($bills as $k1 => $v1) {
-                $additional_bill += $v1->bill_amount;
-            }
-
 
             $rentInfo = RenterUnit::where('renter_id', $renter_id)->get();
 
@@ -64,7 +58,6 @@ class BillPaymentsController extends Controller
 
 
     public function make_payment(Request $request) {
-
         $message  = '';
         $success_bill = 0;
 
@@ -80,7 +73,7 @@ class BillPaymentsController extends Controller
             }
         }
         $message    .= $success_bill.' Bill paid successfully !';
-        return Redirect::route('renter.view_bill', $bill_payment->renter_id)->with('message', $message);
+        return Redirect::route('renter.renter_bill_receipt', $bill_payment->renter_id)->with('message', $message);
     }
 
     public function report_search() {
@@ -133,6 +126,53 @@ class BillPaymentsController extends Controller
     public function rent_bill_pay(Request $request) {
         $renter_id = $request->renter_id;
         return Redirect::route('renter.view_bill', $renter_id);
+    }
+
+    public function renter_bill_receipt($renter_id) {
+        $monthyear  = date('Y-m');
+
+        $renterInfo = Renter::findOrFail($renter_id);
+        $bill_details = BillPayment::where(['renter_id' => $renter_id, 'monthyear' => $monthyear.'-01'])->first();
+
+        $previous_bills = [];
+
+        $previous_bill_obj = BillPayment::where('monthyear', '<', $monthyear.'-1')->where('paid', 'no');
+
+        if($previous_bill_obj->count()) {
+            $previous_bills = $previous_bill_obj->get();
+        }
+
+        $p_bill = 0;
+        foreach($previous_bill_obj->get() as $k => $v) {
+            $p_bill += $v->total_payble;
+        }
+
+        $total_bill = $bill_details->total_payble + $p_bill;
+
+        $words = BillPayment::convertNumber( number_format($total_bill,2,".",","));
+
+        return view('bills.rent_bill_receipt', compact('bill_details', 'renterInfo', 'monthyear', 'previous_bills', 'words'));
+    }
+
+    public function create_notification() {
+        $renters = Renter::whereStatus(1)->orderBy('name')->get();
+        $bill = [];
+        foreach($renters as $k => $v) {
+            
+            $bill[$k]['renter_name'] = $v->name;
+            //rent bill
+            $rent_bills = BillPayment::where('paid', 'no')->get();
+            foreach($rent_bills as $kr => $vr) {
+                $bill[$k]['bill_info'][$kr]['rent_bill'] = $vr->total_payble;
+            }
+
+            //electricity bill
+            $electricity_bills = Bill::where('paid', 'unpaid')->get();
+            foreach($electricity_bills as $ke => $ve) {
+                $bill[$k]['bill_info'][$ke]['electricity_bill'] = $ve->bill_amount;
+            }
+        }
+        return view('bill_payments.notification', compact('bill'));
     }
     
 }
