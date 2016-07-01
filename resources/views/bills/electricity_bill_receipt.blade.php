@@ -91,6 +91,17 @@
                         </div>
 
 
+                        <div class="col-md-3">
+                            Electricity Charges : 
+                        </div>
+                        <div class="col-md-3">
+                              @Rs {{ $v['unit_cost']  }} per unit
+                        </div>
+
+                        <div class="col-md-12">
+                            ( Rupees {{ $v['bill_words'] }} ) only
+                        </div> 
+
 
                         <table class="table">
                             <thead>
