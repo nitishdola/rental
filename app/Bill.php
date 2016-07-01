@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Bill extends Model
 {
-    protected $fillable = array('bill_type_id', 'renter_id', 'period_from', 'bill_amount', 'monthyear', 'period_to');
+    protected $fillable = array('bill_type_id', 'renter_id', 'period_from', 'bill_amount', 'monthyear', 'period_to', 'current_meter_reading', 'previous_meter_reading');
 	protected $table    = 'bills';
     protected $guarded  = ['_token'];
 

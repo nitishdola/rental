@@ -18,6 +18,7 @@
         {!! Form::model($bill, array('route' => ['bill.update', $bill->id], 'id' => 'bill_store', 'class' => 'form-horizontal row-border')) !!}
 
             @include('bills._create')
+            <label class="col-md-2"></label> 
             {!! Form:: submit('Update', ['class' => 'btn btn-success']) !!}
         {!!form::close()!!}
     </div>

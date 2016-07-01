@@ -44,28 +44,80 @@
                     <div class="row">
                         @if($bill_receipt)
                         <?php $total = 0; ?>
+
+                        <div class="col-md-offset-3 col-md-6" style="text-align: center;">
+                            <h3>VAISHALI COMPLEX</h3>
+                            <h5>GS Road, Paltan Bazar, Guwahati - 781008</h5>
+                        </div>
+
+                        <div class="col-md-12" style="text-align: left;">
+                        <h4>Tenant : {{ $renterInfo->name }}</h4>
+                        </div>
+
+                        @foreach($bill_receipt as $k => $v)
+
+                        <div class="col-md-3">
+                            Bill period : 
+                        </div>
+                        <div class="col-md-3">
+                            From <span style="text-decoration: underline;">{{ $v['period_from'] }}</span> 
+                        </div>
+                        <div class="col-md-1">To </div>
+                        <div class="col-md-5">
+                            <span style="text-decoration: underline;">{{ $v['period_to'] }}</span>
+                        </div>
+
+
+                        <div class="col-md-3">
+                            Current Meter Reading : 
+                        </div>
+                        <div class="col-md-2">
+                             <span style="text-decoration: underline;">{{ $v['current_meter_reading'] }}</span> 
+                        </div>
+
+                        <div class="col-md-3">
+                            Previous Meter Reading : 
+                        </div>
+                        <div class="col-md-2">
+                             <span style="text-decoration: underline;">{{ $v['previous_meter_reading'] }}</span> 
+                        </div>
+
+
+                        <div class="col-md-3">
+                            Units Consumed : 
+                        </div>
+                        <div class="col-md-2">
+                             <span style="text-decoration: underline;">{{ $v['current_meter_reading'] - $v['previous_meter_reading'] }}</span> 
+                        </div>
+
+
+
                         <table class="table">
                             <thead>
                                 <tr>
                                     <th>Bill Month</th>
+                                    <th> Units </th>
                                     <th>Amount</th>
                                 </tr>
                             </thead>
 
                             <tbody style="text-align:center">
-                            @foreach($bill_receipt as $k => $v)
+                            
                                 <tr>
-                                    <td> {{ date('F Y', strtotime($v['monthyear'])) }}</td>
+                                    <td> {{ $v['period_from'] }} to {{ $v['period_to'] }}</td>
+                                    <td> {{ $v['current_meter_reading']-$v['previous_meter_reading'] }}</td>
+
                                     <td> {{ $v['bill_amount'] }} </td>
                                 </tr>
                                 <?php $total+= $v['bill_amount']; ?>
-                            @endforeach
+                            
                                 <tr>
                                     <td> Total </td>
                                     <td> {{ $total }} </td>
                                 </tr>
                             </tbody>
                         </table>
+                        @endforeach
                         @endif
                     </div>
 

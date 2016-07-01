@@ -18,7 +18,7 @@
                 #
             </th>
             <th class="hidden-xs">
-                Month
+                Period
             </th>
             <th>
                 Renter Name
@@ -43,35 +43,34 @@
     </thead>
     <tbody>
         @foreach($results as $k => $v)
-        <tr>
+        <tr @if($v->paid == 'paid') class="success" @endif>
             <td> {{ (($results->currentPage() - 1 ) * $results->perPage() ) + $count + $k }} </td>
-            <td> {{ date('F , Y', strtotime($v->monthyear)) }}</td>
+            <td> {{ date('d-m-Y', strtotime($v->period_from)) }} to {{ date('d-m-Y', strtotime($v->period_to)) }}</td>
             <td> {{ $v->renter['name'] }}</td>
             <td class="hidden-xs"> {{ $v->bill_type['name'] }} </td>
             <td> {{ $v->bill_amount }} </td>
-            
-
-            <!-- <td>
-                <a href=" {{ route('renter.view_bill', $v->renter_id) }}">
-                    <i class="fa fa-eye"></i>View Full Month Bill
-                </a>
-            </td> -->
-
             <td>
+                @if($v->paid == 'unpaid')
                 <a href=" {{ route('bill.edit', $v->id) }}">
                     <i class="fa fa-edit"></i>Edit
                 </a>
+                @else
+                <b> Bill Paid </b>
+                @endif
             </td>
 
             <td>
+                @if($v->paid == 'unpaid')
                 <a  style="color:red" onclick="return confirm('Are you sure you want to delete this item? This action can not be undone');" href=" {{ route('bill.disable', $v->id) }}">
                     <i class="fa fa-trash"></i>Delete
                 </a>
+                @endif
             </td>
         </tr>
         @endforeach
     </tbody>
 </table>
+<p> * Bills which are already paid can't be edited/removed </p> 
 <div class="pagination">
 {!! $results->render() !!}
 </div>

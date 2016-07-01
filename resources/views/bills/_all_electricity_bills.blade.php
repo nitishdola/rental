@@ -39,6 +39,7 @@
         <thead>
             <tr>
                 <th>Bill Month</th>
+                <th> Units </th>
                 <th>Amount</th>
             </tr>
         </thead>
@@ -46,13 +47,15 @@
         <tbody style="text-align:center">
         @foreach($results as $k => $v) 
             <tr>
-                <td> {{ date('F Y', strtotime($v->monthyear)) }}</td>
+                <td> {{ date('d-m-Y', strtotime($v->period_from)) }} to {{ date('d-m-Y', strtotime($v->period_to)) }}</td>
+                <td> {{ $v->current_meter_reading-$v->previous_meter_reading }}</td>
                 <td> {{ $v->bill_amount }} </td>
             </tr>
             <input type="hidden" name="bill_ids[]" value="{{ $v->id }}">
             <?php $total+= $v->bill_amount; ?>
         @endforeach
             <tr>
+                <td></td>
                 <td> Total </td>
                 <td> {{ $total }} </td>
             </tr>

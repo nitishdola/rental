@@ -71,32 +71,47 @@ class BillsController extends Controller
         $renters = Renter::orderBy('name')->lists('name', 'id')->toArray();
         $bill    = Bill::findOrFail($id);
         $bill['monthyear'] = date('m-Y', strtotime($bill->monthyear));
-        return view('bills.edit', compact('renters', 'bill', 'bill_types'));
+
+        if($bill->paid == 'unpaid') {
+            return view('bills.edit', compact('renters', 'bill', 'bill_types'));
+        }else{
+            $message = 'Bill already paid ! cant update the info ';
+            return Redirect::route('bill.index')->with('message', $message);
+        }
+        
     }
 
     public function update(Request $request, $id ) {
         $validator = Validator::make($data = $request->all(), Bill::$rules);
         if ($validator->fails()) return Redirect::back()->withErrors($validator)->withInput();
 
-        $data['monthyear'] = '01-'.$request->monthyear;
-        $data['monthyear'] = date('Y-m-d', strtotime( $data['monthyear'] ));
-        $message = '';
+        $data['period_from'] = date('Y-m-d', strtotime( $data['period_from'] ));
+        $data['period_to'] = date('Y-m-d', strtotime( $data['period_to'] ));
 
-        $bill    = Bill::findOrFail($id);   
+        $data['bill_amount'] = ElectricityUnit::get_unit_cost($request->current_meter_reading-$request->previous_meter_reading);
+
+        $message = '';
+        $bill = Bill::findOrFail($id);
         $bill->fill($data);
 
-        if($bill->save()) {
+        if($bill = $bill->save()) {
                 $message .= 'Bill updated successfully !';
         }else{
             $message .= 'Unable to update renter !';
         }
 
-        return Redirect::route('bill.view', $bill->id)->with('message', $message);
+        return Redirect::route('bill.index')->with('message', $message);
     }
 
     public function delete($id) {
-        Bill::destroy($id);
-        $message = 'Bill Removed !';
+        $bill = Bill::findOrFail($id);
+        if($bill->paid == 'paid') {
+            $message = 'Bill aready paid !';
+        }else{
+            Bill::destroy($id);
+            $message = 'Bill Removed !';
+        }
+        
         return Redirect::route('bill.index')->with('message', $message);
     }
 
@@ -123,9 +138,12 @@ class BillsController extends Controller
         $bill_receipt = [];
         if(!empty(json_decode($ids))) {
             foreach(json_decode($ids) as $k => $v) {
-               $bill = BIll::findOrFail($v);
-               $bill_receipt[$k]['monthyear'] = $bill->monthyear;
+               $bill = Bill::findOrFail($v);
+               $bill_receipt[$k]['current_meter_reading'] = $bill->current_meter_reading;
+               $bill_receipt[$k]['previous_meter_reading']=$bill->previous_meter_reading;
                $bill_receipt[$k]['bill_amount'] = $bill->bill_amount;
+               $bill_receipt[$k]['period_from'] = date('d-m-Y', strtotime($bill->period_from));
+               $bill_receipt[$k]['period_to']   = date('d-m-Y', strtotime($bill->period_to));
                $renter_id = $bill->renter_id;
             }
         }
