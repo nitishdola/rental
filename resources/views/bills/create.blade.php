@@ -7,7 +7,7 @@
 @stop
 @section('pageJs')
 <script type="text/javascript" src="{{ asset('vendors/select2/select2.js') }}"></script>
-
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.blockUI/2.70/jquery.blockUI.min.js"></script>
 @stop
 
 @section('content')
@@ -25,6 +25,29 @@
 @section('pageSpecificScripts')
 <script>
 $('.select2').select2();
+$('#renter_id').change(function() {
+	if($('#renter_id').val() != '') {
+		$.blockUI();
+		data = '';
+		url  = '';
+		data += '&renter_id='+$(this).val();
+		url  += '{{ route("electricity.previous_reading")}}';
 
+		$.ajax({
+			data: data,
+			type: 'get',
+			url : url,
+
+			error : function(resp) {
+				console.log(resp);
+				$.unblockUI();
+			},
+			success : function(resp) {
+				$.unblockUI();
+				$('#previous_meter_reading').val(resp);
+			}
+		});	
+	}
+});
 </script>
 @stop

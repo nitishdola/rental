@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 
 use App\Http\Requests;
-use App\ElectricityUnit;
+use App\ElectricityUnit, App\Bill;
 use Redirect, DB, Validator;
 
 class ElectricityUnitsController extends Controller
@@ -85,6 +85,18 @@ class ElectricityUnitsController extends Controller
                 return $v->cost;
             }
            
+        }
+    }
+
+    public function previous_reading() {
+        if(isset($_GET['renter_id']) && $_GET['renter_id'] != '') {
+            $renter_id = $_GET['renter_id'];
+            $bill = Bill::where('renter_id', $renter_id)->orderBy('period_to', 'DESC')->first();
+            if($bill) {
+                return $bill->current_meter_reading;
+            }else{
+                return 0;
+            }
         }
     }
 }

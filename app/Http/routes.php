@@ -112,6 +112,12 @@ Route::group(['prefix'=>'renter'], function() {
         'middleware' => 'admin',
         'uses' => 'RentersController@view_previous_bill'
     ]);
+
+    Route::get('/count-units', [
+        'as' => 'renter.count_units',
+        //'middleware' => 'admin',
+        'uses' => 'RentersController@count_units'
+    ]);
 });
 
 Route::group(['prefix'=>'bill'], function() {
@@ -185,11 +191,12 @@ Route::group(['prefix'=>'bill'], function() {
         'middleware' => 'admin',
         'uses' => 'BillsController@electricity_bill_pay'
     ]);
-     Route::get('/electricity/receipt/{ids}', [
+    Route::get('/electricity/receipt/{ids}', [
         'as' => 'electricity.receipt',
         'middleware' => 'admin',
         'uses' => 'BillsController@electricity_bill_receipt'
     ]); 
+    
 });
 
 
@@ -292,4 +299,9 @@ Route::group(['prefix'=>'electricity-unit'], function() {
         //'middleware' => 'admin',
         'uses' => 'ElectricityUnitsController@get_cost'
     ]);
+    Route::get('/electricity/previous-meter-reading', [
+        'as' => 'electricity.previous_reading',
+        'middleware' => 'admin',
+        'uses' => 'ElectricityUnitsController@previous_reading'
+    ]); 
 });

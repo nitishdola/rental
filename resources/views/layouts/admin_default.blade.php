@@ -28,6 +28,8 @@
 
     <link rel="stylesheet" href="{{ asset('zebra/css/default.css') }}" />
     <!--end of page level css-->
+    
+    <script src="{{ asset('js/jquery-1.11.1.min.js') }}" type="text/javascript"></script>
     @yield('pageCss')
 </head>
 
@@ -79,7 +81,6 @@
         <i class="livicon" data-name="plane-up" data-size="18" data-loop="true" data-c="#fff" data-hc="white"></i>
     </a>
     <!-- global js -->
-    <script src="{{ asset('js/jquery-1.11.1.min.js') }}" type="text/javascript"></script>
     <script src="{{ asset('js/bootstrap.min.js') }}" type="text/javascript"></script>
     <!--livicons-->
     <script src="{{ asset('vendors/livicons/minified/raphael-min.js') }}" type="text/javascript"></script>

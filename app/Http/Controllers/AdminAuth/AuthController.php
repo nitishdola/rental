@@ -21,7 +21,7 @@ class AuthController extends Controller
     
     public function showDashboard() {
         $units = Unit::count();
-        $renters = Renter::count();
+        $renters = Renter::where('status', 1)->count();
         $bills = Bill::count();
         return view('auth.admin.dashboard', compact('units', 'renters', 'bills'));
     }

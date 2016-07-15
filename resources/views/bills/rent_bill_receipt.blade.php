@@ -1,15 +1,18 @@
 <style>
 @media print {
-    .header, .left-side, .content-header,#other-btn {
-     display:none;
-    }
+    .header,.alert_msg, .print_button, .left-side, .content-header,#other-btn {
+         display:none;
+        }
 
-    #prnt {
-     display:block;
-    }
-    .pending_amount {
-        display: none;
-    }
+        #prnt {
+         display:block;
+        }
+        .pending_amount {
+            display: none;
+        }
+        *{
+            font-size: 9px;
+        }
 }
 </style>
 
@@ -17,11 +20,26 @@
 @section('title') Renters Bill @stop
 @section('pageTitle')  View Renters Bill @stop
 @section('content')
-<div class="col-md-10 col-offset-1">
+<div class="col-xs-10 col-offset-1">
     <div class="portlet box danger">
         <div class="portlet-body">
             <div id="prnt">
+                <style>
+                    @media print {
+                        .header,.alert_msg, .print_button, .left-side, .content-header,#other-btn {
+                         display:none;
+                        }
 
+                        #print {
+                         display:block;
+                         padding: 20px;
+                         font-size: 6px;
+                        }
+                        .pending_amount {
+                            display: none;
+                        }
+                    }
+                    </style>
                 <div class="row">
                     @if($bill_details)
                     <?php $pending_bill = 0;
@@ -31,13 +49,13 @@
                         }
                     }
                     ?>
-                    <div class="row">
-                        <div class="col-md-offset-3 col-md-6" style="text-align: center;">
+                    <div class="row" id="print">
+                        <div class="col-xs-offset-3 col-xs-6" style="text-align: center;">
                             <h3>VAISHALI COMPLEX</h3>
                             <h5>GS Road, Paltan Bazar, Guwahati - 781008</h5>
                         </div>
 
-                        <div class="col-md-12" style="text-align: left;">
+                        <div class="col-xs-12" style="text-align: left;">
                         <h5 style="line-height: 23px">Received with thanks from M/s {{ $renterInfo->name }} a sum of Rs. {{ number_format($bill_details->rent+$pending_bill,2,".",",") }} only in cash/cheque @if($bill_details->cheque_number != '') ( No- {{$bill_details->cheque_number}} date {{$bill_details->date }} ) @endif for the following accounts</h5>
 
                         <br>
@@ -52,10 +70,12 @@
                             &#x20b9; {{ number_format($bill_details->rent+$pending_bill,2,".",",") }}
                         </div>
 
-                        <div class="col-md-6"></div>
-                        <div class="col-md-5" style="text-align: center"><p> For Landlords of </p> <p><h4>VAISHALI COMPLEX</h4></p></div>
+                        <div class="col-xs-6"></div>
+                        <div class="col-xs-5" style="text-align: center"><p> For Landlords of </p> <p><h4>VAISHALI COMPLEX</h4></p></div>
                     </div>
                 </div>
+
+                <button class="btn btn-success print_button" onclick="PrintElem('#print')" ><span class="glyphicon glyphicon-print"></span> PRINT </button>
             </div>
         </div>
     </div>
@@ -76,7 +96,8 @@
         var mywindow = window.open('', 'my div', 'height=400,width=600');
         mywindow.document.write('<html><head><title>Tender</title>');
         /*optional stylesheet*/ 
-        mywindow.document.write('<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" type="text/css" />');
+        css_path = "{{ asset('css/bootstrap.min.css') }}";
+        mywindow.document.write('<link rel="stylesheet" href="'+css_path+'" type="text/css" />');
         mywindow.document.write('</head><body >');
         mywindow.document.write(data);
         mywindow.document.write('</body></html>');

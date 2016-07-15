@@ -9,8 +9,10 @@
      display:none;
     }
 
-    #prnt {
+    #print {
      display:block;
+     padding: 20px;
+     font-size: 6px;
     }
     .pending_amount {
         display: none;
@@ -24,20 +26,37 @@
     <div class="panel-body" id="print">
     	@if(count($bill))
         @foreach($bill as $k => $v)
-            <div class="col-md-3" style="padding:4px 0; text-align: center; border: 1px dotted #777">
+            <div class="col-xs-4" style="padding:4px 0; text-align: center; border: 1px dotted #777">
             <strong>{{ $v['renter_name'] }}</strong>
             <br>
             <?php $rent_bill = 0; $elect_bill = 0;?>
-            @foreach($v['bill_info'] as $k1 => $v1)
-            <?php $rent_bill += $v1['rent_bill']; ?>
-            <?php $elect_bill += $v1['electricity_bill'] ; ?>
-            @endforeach
-            R - {{ number_format($rent_bill,2,".",",") }} E - {{ number_format($elect_bill,2,".",",") }} <h6>Total {{ number_format($rent_bill+$elect_bill,2,".",",")}}</h6>
+            @if(isset($v['bill_info']))
+                @if(isset($v['bill_info']['rent_bill']))
+                    <div class="col-md-6">
+                    <h5>Rent</h5>
+                    @foreach($v['bill_info']['rent_bill'] as $k1 => $v1)
+                        {{ date('F', strtotime($k1)) }} {{ $v1 }}<br>
+                        <?php $rent_bill += $v1; ?>
+                    @endforeach
+                    </div>
+
+                    <div class="col-md-6">
+                    <h5>Electricity</h5>
+                    @foreach($v['bill_info']['electricity_bill'] as $k2 => $v2)
+                        {{ $k2 }} {{ $v2 }}<br>
+                        <?php $elect_bill += $v2; ?>
+                    @endforeach
+                    </div>
+                @endif
+                <div class="col-md-12">
+                <p> Total - R {{ $rent_bill }} + E {{ $elect_bill }} = &#x20b9; <?= number_format((float)$rent_bill+$elect_bill, 2, '.', ''); ?></p>
+                </div>
+            @else
+            * no bills found
+            @endif
             </div>
         @endforeach
-        <div class="col-md-12" style="margin-top:20px">
-        <button class="btn btn-success print_button" onclick="window.print()"><span class="glyphicon glyphicon-print"></span> PRINT </button>
-        </div>
+        
         @else
         	<div class="alert alert-success fade in">
 		        <a href="#" class="close" data-dismiss="alert">&times;</a>
@@ -45,6 +64,38 @@
 		    </div>
         @endif
     </div>
+    <button class="btn btn-success print_button" onclick="PrintElem('#print')" ><span class="glyphicon glyphicon-print"></span> PRINT </button>
+    
 </div>
 @endsection
+
+@section('pageSpecificScripts')
+<script type="text/javascript">
+    function PrintElem(elem)
+    {
+       Popup($(elem).html());
+    }
+
+    function Popup(data) 
+    {
+        var mywindow = window.open('', 'my div', 'height=400,width=600');
+        mywindow.document.write('<html><head><title>Tender</title>');
+        /*optional stylesheet*/ 
+        css_path = "{{ asset('css/bootstrap.min.css') }}";
+        mywindow.document.write('<link rel="stylesheet" href="'+css_path+'" type="text/css" />');
+        mywindow.document.write('</head><body >');
+        mywindow.document.write(data);
+        mywindow.document.write('</body></html>');
+
+        mywindow.document.close(); // necessary for IE >= 10
+        mywindow.focus(); // necessary for IE >= 10
+
+        mywindow.print();
+        mywindow.close();
+
+        return true;
+    }
+
+</script>
+@stop
 

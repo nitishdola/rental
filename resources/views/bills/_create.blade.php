@@ -22,12 +22,12 @@
   {!! $errors->first('period_to', '<span class="help-inline">:message</span>') !!}
 </div>
 
-<div class="form-group {{ $errors->has('current_meter_reading') ? 'has-error' : ''}}">
-  {!! Form::label('current_meter_reading', 'Current Meter Reading', array('class' => 'col-md-2 control-label')) !!}
+<div class="form-group {{ $errors->has('renter_id') ? 'has-error' : ''}}">
+  {!! Form::label('renter_id', 'Renter', array('class' => 'col-md-2 control-label')) !!}
   <div class="col-md-5">
-    {!! Form::number('current_meter_reading', null, ['class' => 'form-control required', 'id' => 'current_meter_reading', 'placeholder' => 'Current Reading','autocomplete' => 'off', 'required' => 'true']) !!}
+    {!! Form::select('renter_id', $renters, null, ['class' => 'select2 form-control required', 'id' => 'renter_id', 'placeholder' => 'Select Renter','required' => 'true']) !!}
   </div>
-  {!! $errors->first('current_meter_reading', '<span class="help-inline">:message</span>') !!}
+  {!! $errors->first('renter_id', '<span class="help-inline">:message</span>') !!}
 </div>
 
 <div class="form-group {{ $errors->has('previous_meter_reading') ? 'has-error' : ''}}">
@@ -38,11 +38,12 @@
   {!! $errors->first('previous_meter_reading', '<span class="help-inline">:message</span>') !!}
 </div>
 
-<div class="form-group {{ $errors->has('renter_id') ? 'has-error' : ''}}">
-  {!! Form::label('renter_id', 'Renter', array('class' => 'col-md-2 control-label')) !!}
+<div class="form-group {{ $errors->has('current_meter_reading') ? 'has-error' : ''}}">
+  {!! Form::label('current_meter_reading', 'Current Meter Reading', array('class' => 'col-md-2 control-label')) !!}
   <div class="col-md-5">
-    {!! Form::select('renter_id', $renters, null, ['class' => 'select2 form-control required', 'id' => 'renter_id', 'placeholder' => 'Select Renter','required' => 'true']) !!}
+    {!! Form::number('current_meter_reading', null, ['class' => 'form-control required', 'id' => 'current_meter_reading', 'placeholder' => 'Current Reading','autocomplete' => 'off', 'required' => 'true']) !!}
   </div>
-  {!! $errors->first('renter_id', '<span class="help-inline">:message</span>') !!}
+  {!! $errors->first('current_meter_reading', '<span class="help-inline">:message</span>') !!}
 </div>
+
 

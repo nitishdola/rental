@@ -22,9 +22,7 @@ class BillPaymentsController extends Controller
         foreach($generated_bills as $k => $v) {
             $bill_renters[] = $v->renter_id;
         }
-
-        $renters = Renter::orderBy('name')->whereNotIn('id', $bill_renters)->paginate(20);
-
+        $renters = Renter::orderBy('name')->whereNotIn('id', $bill_renters)->where('status',1)->get();
         return view('bill_payments.create_bill', compact('renters'));
     }
 
@@ -77,7 +75,7 @@ class BillPaymentsController extends Controller
     }
 
     public function report_search() {
-    	$renters = Renter::orderBy('name')->lists('name', 'id')->toArray();
+    	$renters = Renter::orderBy('name')->where('status', 1)->lists('name', 'id')->toArray();
     	return view('bill_payments.report_search', compact('renters'));
     }
 
@@ -109,7 +107,7 @@ class BillPaymentsController extends Controller
     }
 
     public function electricity_bill_view_renters() {
-        $renters = Renter::orderBy('name')->lists('name', 'id')->toArray();
+        $renters = Renter::orderBy('name')->where('status', 1)->lists('name', 'id')->toArray();
         return view('bill_payments.electricity_bill_view_renters', compact('renters'));
     }
 
@@ -119,7 +117,7 @@ class BillPaymentsController extends Controller
     }
 
     public function rent_bill_view_renters() {
-        $renters = Renter::orderBy('name')->lists('name', 'id')->toArray();
+        $renters = Renter::orderBy('name')->where('status', 1)->lists('name', 'id')->toArray();
         return view('bill_payments.rent_bill_view_renters', compact('renters'));
     }
 
@@ -163,13 +161,14 @@ class BillPaymentsController extends Controller
             //rent bill
             $rent_bills = BillPayment::where('paid', 'no')->where('renter_id', $v->id)->get();
             foreach($rent_bills as $kr => $vr) {
-                $bill[$k]['bill_info'][$kr]['rent_bill'] = $vr->total_payble;
+                $bill[$k]['bill_info']['rent_bill'][$vr->monthyear] = $vr->total_payble;
+                //$bill[$k]['bill_info']['rent_bill_month'][$kr] = $vr->monthyear;
             }
 
             //electricity bill
             $electricity_bills = Bill::where('paid', 'unpaid')->where('renter_id', $v->id)->get();
             foreach($electricity_bills as $ke => $ve) {
-                $bill[$k]['bill_info'][$ke]['electricity_bill'] = $ve->bill_amount;
+                $bill[$k]['bill_info']['electricity_bill'][date('F', strtotime($ve->period_to))] = $ve->bill_amount;
             }
         }
         return view('bill_payments.notification', compact('bill'));

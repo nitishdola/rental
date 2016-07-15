@@ -11,7 +11,7 @@
     <li>
         <a href="#">
             <i class="livicon" data-name="brush" data-c="#F89A14" data-hc="#F89A14" data-size="18" data-loop="true"></i>
-            <span class="title">Bill</span>
+            <span class="title">Eelctricity Bill</span>
             <span class="fa arrow"></span>
         </a>
         <ul class="sub-menu">
@@ -41,7 +41,7 @@
     <li>
         <a href=" {{ route('renter.notification') }}">
             <i class="livicon" data-name="map" data-c="#F89A55" data-hc="#F89A55" data-size="18" data-loop="true"></i>
-            <span class="title">Create Notification List</span>
+            <span class="title">View Bill Notification</span>
             <span class="fa arrow-right"></span>
         </a>
     </li>
@@ -50,7 +50,7 @@
     <li>
          <a href="#">
             <i class="livicon" data-name="brush" data-c="#F89A14" data-hc="#F89A14" data-size="18" data-loop="true"></i>
-            <span class="title">Bill Payment</span>
+            <span class="title">Pay Bills</span>
             <span class="fa arrow"></span>
         </a>
         <ul class="sub-menu">

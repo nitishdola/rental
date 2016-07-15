@@ -19,7 +19,7 @@ class BillsController extends Controller
 
     public function create() {
         $bill_types = BillType::orderBy('name')->lists('name', 'id')->toArray();
-    	$renters    = Renter::orderBy('name')->lists('name', 'id')->toArray();
+    	$renters    = Renter::orderBy('name')->where('status', 1)->lists('name', 'id')->toArray();
     	return view('bills.create', compact('renters', 'bill_types'));
     }
 
@@ -68,7 +68,7 @@ class BillsController extends Controller
 
     public function edit($id) {
         $bill_types = BillType::orderBy('name')->lists('name', 'id')->toArray();
-        $renters = Renter::orderBy('name')->lists('name', 'id')->toArray();
+        $renters = Renter::orderBy('name')->where('status', 1)->lists('name', 'id')->toArray();
         $bill    = Bill::findOrFail($id);
         $bill['monthyear'] = date('m-Y', strtotime($bill->monthyear));
 

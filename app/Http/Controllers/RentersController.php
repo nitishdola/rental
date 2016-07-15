@@ -95,6 +95,10 @@ class RentersController extends Controller
     }
 
     public function delete($id) {
+
+        //remove units
+        DB::table('renter_units')->where('renter_id', $id)->delete();
+
         $renter = Renter::findOrFail($id);
         $renter->status = 0;
 
@@ -120,5 +124,10 @@ class RentersController extends Controller
         $results = BillPayment::where('renter_id', $renter_id)->orderBy('created_at', 'DESC')->paginate(30);
 
         return view('bill_payments.view_previous_bill', compact('renter', 'results'));
+    }
+
+    public function count_units() {
+        $renter_id = $_GET['renter_id'];
+        return RenterUnit::where('renter_id', $renter_id)->count();
     }
 }
