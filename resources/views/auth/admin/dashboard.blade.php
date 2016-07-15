@@ -56,4 +56,36 @@
         </div>
     </div>
 </div>
+
+
+<div class="col-md-5 fadeInUpBig">
+    <!-- Trans label pie charts strats here-->
+    <div class="lightbluebg no-radius">
+        <div class="panel-body squarebox square_boxs">
+            <div class="col-xs-12 pull-left nopadmar">
+                <div class="row">
+                    <div class="square_box col-xs-12 pull-left">
+                        <div class="number"><a href="{{ route('bill_payment.create') }}">GENERATE BILL</a></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="col-md-5 fadeInUpBig">
+    <!-- Trans label pie charts strats here-->
+    <div class="lightbluebg no-radius">
+        <div class="panel-body squarebox square_boxs">
+            <div class="col-xs-12 pull-left nopadmar">
+                <div class="row">
+                    <div class="square_box col-xs-12 pull-left">
+                        <div class="number" style="text-align: center;"><a href="{{ route('renter.notification') }}">BILL NOTIFICATION</a></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
 @endsection
