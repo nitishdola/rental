@@ -81,13 +81,19 @@ class BillPaymentsController extends Controller
 
     public function report_search_result(Request $request) {
         $matchThese = [];
-
+        $matchThese2 = [];
         if($request->paid) {
             $matchThese['paid'] = $request->paid;
+            if($request->paid == 'no') {
+               $matchThese2['paid'] = 'unpaid'; 
+            }else{
+                $matchThese2['paid'] = 'paid'; 
+            }
         }
         
         if($request->renter_id) {
-            $matchThese['renter_id'] = $request->renter_id;
+            $matchThese['renter_id']  = $request->renter_id;
+            $matchThese2['renter_id'] = $request->renter_id;
         }
 
         $from   = '1970-1-1';
@@ -103,7 +109,12 @@ class BillPaymentsController extends Controller
 
 
         $results = BillPayment::where($matchThese)->where('monthyear', '>=', $from)->where('monthyear', '<=', $to)->with('renter')->paginate(50);
-    	return view('bill_payments.report_search_result', compact('results'));
+
+        $bill_results = Bill::where($matchThese2)->where('period_to', '>=', $from)->where('period_to', '<=', $to)->with('renter')->paginate(50);
+
+        $renters = Renter::orderBy('name')->where('status', 1)->lists('name', 'id')->toArray();
+
+    	return view('bill_payments.report_search_result', compact('renters', 'results', 'bill_results'));
     }
 
     public function electricity_bill_view_renters() {

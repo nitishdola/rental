@@ -173,7 +173,7 @@ Route::group(['prefix'=>'bill'], function() {
     Route::get('/report', [
         'as' => 'bill.report_search',
         'middleware' => 'admin',
-        'uses' => 'BillPaymentsController@report_search'
+        'uses' => 'BillPaymentsController@report_search_result'
     ]);
 
     Route::get('/report-search-result', [
