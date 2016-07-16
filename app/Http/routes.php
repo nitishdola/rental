@@ -197,6 +197,13 @@ Route::group(['prefix'=>'bill'], function() {
         'uses' => 'BillsController@electricity_bill_receipt'
     ]); 
     
+
+    Route::get('/receipt/{rids}/{eids}', [
+        'as' => 'bill.receipt',
+        'middleware' => 'admin',
+        'uses' => 'BillsController@receipt'
+    ]); 
+    
 });
 
 

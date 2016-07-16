@@ -113,7 +113,7 @@
     <script src="{{ asset('zebra/javascript/zebra_datepicker.js') }}" type="text/javascript"></script>
     <script>
     $(document).ready(function() {
-        $('input.datepicker').Zebra_DatePicker({ format : 'd-m-Y'});
+        $('input.datepicker').Zebra_DatePicker({ format : 'Y-m-d'});
      });
      </script>
     @yield('pageJs')

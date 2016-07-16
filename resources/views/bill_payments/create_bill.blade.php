@@ -6,7 +6,8 @@
 <div class="panel panel-primary">
     <div class="panel-body"> 
     	@if(count($renters))
-        **<strong>Electricity Bill will not be includd with this bill. </strong> 
+        **<strong>Electricity Bill will not be includd with this bill. </strong>
+        <br><br> 
         {!! Form::open(array('method' => 'post', 'route' => 'bill_payment.generate', 'id' => 'bill_search', 'class' => 'form-horizontal row-border')) !!}
             @include('bill_payments._create_bill')
             {!! Form:: submit('Generate', ['class' => 'btn btn-success']) !!}

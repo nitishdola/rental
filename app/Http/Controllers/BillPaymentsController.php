@@ -14,51 +14,57 @@ class BillPaymentsController extends Controller
 {
 
     public function create_bill() {
-        $monthyear = date('Y-m');
+        $monthyear = date('Y-m', strtotime('last month'));
         $monthyear = $monthyear.'-01';
         $generated_bills = BillPayment::where('monthyear', $monthyear)->get();
 
         $bill_renters = [];
-        foreach($generated_bills as $k => $v) {
+        /*foreach($generated_bills as $k => $v) {
             $bill_renters[] = $v->renter_id;
-        }
+        }*/
         $renters = Renter::orderBy('name')->whereNotIn('id', $bill_renters)->where('status',1)->get();
         return view('bill_payments.create_bill', compact('renters'));
     }
 
     public function generate_bill(Request $request) {
-        $monthyear  = date('Y-m');
-        for($i = 0; $i < count($request->renters); $i++) {
-            $renter_id = $request->renters[$i];
+        
+        if(count($request->renters)) {
+            $monthyear  = date('Y-m', strtotime('01-'.$request->monthyear));
+            for($i = 0; $i < count($request->renters); $i++) {
+                $renter_id = $request->renters[$i];
 
-            $additional_bill = 0;
+                $additional_bill = 0;
 
-            $rentInfo = RenterUnit::where('renter_id', $renter_id)->get();
+                $rentInfo = RenterUnit::where('renter_id', $renter_id)->get();
 
-            $unit_rent = 0;
+                $unit_rent = 0;
 
-            foreach($rentInfo as $k => $v) {
-                $unitInfo = Unit::findOrFail($v->unit_id);
-                $unit_rent += $unitInfo->fare;
+                foreach($rentInfo as $k => $v) {
+                    $unitInfo = Unit::findOrFail($v->unit_id);
+                    $unit_rent += $unitInfo->fare;
+                }
+
+                $data['renter_id']  = $renter_id;
+                $data['rent']       = $unit_rent;
+                $data['total_payble'] = $unit_rent + $additional_bill;
+                $data['monthyear']  = date('Y-m-d', strtotime($monthyear));
+                $data['paid']       = 'no';
+
+                BillPayment::create($data);
             }
-
-            $data['renter_id']  = $renter_id;
-            $data['rent']       = $unit_rent;
-            $data['total_payble'] = $unit_rent + $additional_bill;
-            $data['monthyear']  = date('Y-m-d', strtotime($monthyear));
-            $data['paid']       = 'no';
-
-            BillPayment::create($data);
+            $message = 'Bill successfully generated for '.count($request->renters). ' renters !';
+        }else{
+            $message = 'No renter selected !';return Redirect::route('bill_payment.create')->with('message', $message);
         }
-        $message = 'Bill successfully generated for '.count($request->renters). ' renters !';
         return Redirect::route('bill_payment.create')->with('message', $message);
+        
     }
 
 
     public function make_payment(Request $request) {
         $message  = '';
         $success_bill = 0;
-
+        $success_ebill = 0;
         for($i = 0; $i < count($request->bill_payment_id); $i++) {
             $bill_payment = BillPayment::findOrFail($request->bill_payment_id[$i]);
 
@@ -70,8 +76,22 @@ class BillPaymentsController extends Controller
                 $success_bill++;
             }
         }
-        $message    .= $success_bill.' Bill paid successfully !';
-        return Redirect::route('renter.renter_bill_receipt', $bill_payment->renter_id)->with('message', $message);
+
+        for($j = 0; $j < count($request->bill_ids); $j++) {
+            $bill = Bill::findOrFail($request->bill_ids[$j]);
+
+            $bill->paid = 'paid';
+            //$bill_payment->pay_date = date('Y-m-d');
+            
+
+            if($bill->save()) {
+                $success_ebill++;
+            }
+        }
+
+        $message    .= ' Bill paid successfully !';
+        /*return Redirect::route('renter.renter_bill_receipt', $bill_payment->renter_id)->with('message', $message);*/
+        return Redirect::route('bill.receipt', array(json_encode($request->bill_payment_id), json_encode($request->bill_ids)))->with('message', $message);
     }
 
     public function report_search() {
@@ -138,7 +158,7 @@ class BillPaymentsController extends Controller
     }
 
     public function renter_bill_receipt($renter_id) {
-        $monthyear  = date('Y-m');
+        $monthyear  = date('Y-m', strtotime('last month'));
 
         $renterInfo = Renter::findOrFail($renter_id);
         $bill_details = BillPayment::where(['renter_id' => $renter_id, 'monthyear' => $monthyear.'-01'])->first();

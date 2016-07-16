@@ -152,6 +152,90 @@ class BillsController extends Controller
             }
         }
         $renterInfo = Renter::findOrFail($renter_id);
-        return view('bills.electricity_bill_receipt', compact('bill_receipt', 'renterInfo'));
+
+
+
+        ////Rent Bill///
+        $monthyear  = date('Y-m');
+        $bill_details = BillPayment::where(['renter_id' => $renter_id, 'monthyear' => $monthyear.'-01'])->first();
+
+        $previous_bills = [];
+
+        $previous_bill_obj = BillPayment::where('monthyear', '<', $monthyear.'-1')->where('paid', 'no');
+
+        if($previous_bill_obj->count()) {
+            $previous_bills = $previous_bill_obj->get();
+        }
+
+        $p_bill = 0;
+        foreach($previous_bill_obj->get() as $k => $v) {
+            $p_bill += $v->total_payble;
+        }
+
+        $total_bill = $bill_details->total_payble + $p_bill;
+
+        $words = BillPayment::convertNumber( number_format($total_bill,2,".",","));
+        return view('bills.electricity_bill_receipt', compact('bill_receipt', 'renterInfo', 'bill_details', 'monthyear', 'previous_bills', 'words'));
+    }
+
+    public function receipt($rids, $eids) {
+        $bill_receipt = [];
+        if(!empty(json_decode($eids))) {
+            foreach(json_decode($eids) as $k => $v) {
+               $bill = Bill::findOrFail($v);
+               $bill_receipt[$k]['current_meter_reading'] = $bill->current_meter_reading;
+               $bill_receipt[$k]['previous_meter_reading']=$bill->previous_meter_reading;
+               $bill_receipt[$k]['bill_amount'] = $bill->bill_amount;
+               $bill_receipt[$k]['period_from'] = date('d-m-Y', strtotime($bill->period_from));
+               $bill_receipt[$k]['period_to']   = date('d-m-Y', strtotime($bill->period_to));
+               $bill_receipt[$k]['unit_cost']   = ElectricityUnit::get_unit_price($bill->current_meter_reading-$bill->previous_meter_reading);
+
+               $bill_receipt[$k]['bill_words']  = BillPayment::convertNumber($bill->bill_amount) ;
+
+               $renter_id = $bill->renter_id;
+            }
+        }
+        $renterInfo = Renter::findOrFail($renter_id);
+
+
+
+        ////Rent Bill///
+        $rent_bill = [];
+        $total_rbill = 0;
+        if(!empty(json_decode($rids))) {
+            foreach(json_decode($rids) as $k1 => $v1) {
+               $bill_payment = BillPayment::findOrFail($v1);
+               $rent_bill[$k1]['rent'] = $bill_payment->rent;
+               $rent_bill[$k1]['monthyear']=$bill_payment->monthyear;
+               $rent_bill[$k1]['pay_date'] = $bill_payment->pay_date;
+               $rent_bill[$k1]['cheque_number'] = $bill_payment->cheque_number;
+
+               $total_rbill += $bill_payment->rent;
+            }
+        }
+        dump(json_decode($rids));
+
+        /*$monthyear  = date('Y-m');
+        $bill_details = BillPayment::where(['renter_id' => $renter_id, 'monthyear' => $monthyear.'-01'])->first();
+
+        $previous_bills = [];
+
+        $previous_bill_obj = BillPayment::where('monthyear', '<', $monthyear.'-1')->where('paid', 'no');
+
+        if($previous_bill_obj->count()) {
+            $previous_bills = $previous_bill_obj->get();
+        }
+
+        $p_bill = 0;
+        foreach($previous_bill_obj->get() as $k => $v) {
+            $p_bill += $v->total_payble;
+        }
+
+        $total_bill = $bill_details->total_payble + $p_bill;*/
+
+        $rent_bill_words = BillPayment::convertNumber( number_format($total_rbill,2,".",","));
+        /*return view('bills.electricity_bill_receipt', compact('bill_receipt', 'renterInfo', 'bill_details', 'monthyear', 'previous_bills', 'words'));*/
+        dd($rent_bill);
+        return view('bills.receipt', compact('bill_receipt', 'renterInfo', 'rent_bill', 'words'));
     }
 }

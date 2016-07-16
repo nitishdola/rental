@@ -109,14 +109,20 @@ class RentersController extends Controller
         return Redirect::route('renter.index')->with('message', $message);
     }
     public function view_bill($renter_id) {
-        $monthyear  = date('Y-m');
+        $monthyear  = date('Y-m', strtotime('last month'));
 
         $renterInfo = Renter::findOrFail($renter_id);
-        $bill_details = BillPayment::where(['renter_id' => $renter_id, 'monthyear' => $monthyear.'-01'])->first();
+        $bill_details = BillPayment::where(['renter_id' => $renter_id, 'monthyear' => $monthyear.'-01'])->where('paid', 'no')->first();
 
         $previous_bills = BillPayment::where('monthyear', '<', $monthyear.'-1')->where('paid', 'no')->get();
 
-        return view('bills.view', compact('bill_details', 'renterInfo', 'monthyear', 'previous_bills'));
+
+
+
+        //electricity bill
+        $electricity_results = Bill::where(['bill_type_id' => 1, 'renter_id' => $renter_id, 'paid' => 'unpaid'])->get();
+
+        return view('bills.view', compact('bill_details', 'renterInfo', 'monthyear', 'previous_bills', 'electricity_results'));
     }
 
     public function view_previous_bill( $renter_id ) {

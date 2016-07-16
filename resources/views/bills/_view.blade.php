@@ -24,9 +24,9 @@
                     <h4 class="timeline-title">{{ $renterInfo->name }}</h4>
                 </div>
                 <div class="timeline-body">
-                    <p>
+                    <!-- <p>
                         Bills for the month of {{ date('F,Y', strtotime($monthyear)) }}
-                    </p>
+                    </p> -->
                 </div>
             </div>
         </li>
@@ -34,8 +34,9 @@
 </div>
 
 <div class="row">
+    Rent bill
     @if($bill_details)
-	<table class="table">
+	 <table class="table">
 	    <thead>
 	        <tr>
 	            <th>Bill Type</th>
@@ -57,7 +58,7 @@
             <tr class="warning" id="P_{{$v2->id}}">
                 <td> Pending Bill {{ date('F,Y', strtotime($v2->monthyear)) }} </td>
                 <td> <span id="PBA_{{$v2->id}}">{{ number_format($v2->total_payble,2,".",",") }}</span> 
-                    <a href="javascript:void();" class="pending_amount" onclick="removePending({{$v2->id}});">X</a>
+                    <!-- <a href="javascript:void();" class="pending_amount" onclick="removePending({{$v2->id}});">X</a> -->
                 </td>
             </tr>
             @endforeach
@@ -82,39 +83,72 @@
                     @endforeach
 
 
-                     <input type="checkbox" value="check" id="paid_cheque"> Check if paid by cheque
-
-                     <br>
-                    
-                    <div id="cheque" style="display: none;">
-                        <div class="form-group {{ $errors->has('cheque_number') ? 'has-error' : ''}}">
-                          {!! Form::label('cheque_number', 'Cheque Number', array('class' => 'col-md-2 control-label')) !!}
-                          <div class="col-md-5">
-                            {!! Form::text('cheque_number', null, ['class' => 'form-control required', 'id' => 'cheque_number', 'placeholder' => 'Cheque Number (if applicable)','autocomplete' => 'off']) !!}
-                          </div>
-                          {!! $errors->first('cheque_number', '<span class="help-inline">:message</span>') !!}
-                        </div>
-
-                        <div class="form-group {{ $errors->has('period_from') ? 'has-error' : ''}}">
-                          {!! Form::label('cheque_date', 'Cheque Date', array('class' => 'col-md-2 control-label')) !!}
-                          <div class="col-md-9">
-                            {!! Form::text('cheque_date', date('Y-m-3',  strtotime("-1 month")), ['class' => 'datepicker form-control required', 'id' => 'cheque_date']) !!}
-                          </div>
-                          {!! $errors->first('cheque_date', '<span class="help-inline">:message</span>') !!}
-                        </div>
-                    </div>
-                    
-                    {!! Form::label('', '', array('class' => 'col-md-2 control-label')) !!}
-                    {!! Form:: submit('PAY BILL', ['class' => 'btn btn-success']) !!}
-                {!!form::close()!!}
+                     
                 @else
                 	<button class="btn btn-info disabled"> BILL PAID </button>
                 @endif
         </div>
     </div>
+
+    @if($electricity_results)
+      <table class="table">
+      Electricity Bill
+      <?php $total = 0; ?>
+          <thead>
+              <tr>
+                  <th>Bill Month</th>
+                  <th> Units </th>
+                  <th>Amount</th>
+              </tr>
+          </thead>
+
+          <tbody style="text-align:center">
+          @foreach($electricity_results as $k => $v) 
+              <tr>
+                  <td> {{ date('d-m-Y', strtotime($v->period_from)) }} to {{ date('d-m-Y', strtotime($v->period_to)) }}</td>
+                  <td> {{ $v->current_meter_reading-$v->previous_meter_reading }}</td>
+                  <td> {{ $v->bill_amount }} </td>
+              </tr>
+              <input type="hidden" name="bill_ids[]" value="{{ $v->id }}">
+              <?php $total+= $v->bill_amount; ?>
+          @endforeach
+              <tr>
+                  <td></td>
+                  <td> Total </td>
+                  <td> {{ $total }} </td>
+              </tr>
+          </tbody>
+      </table>
+    @endif
+    <input type="checkbox" value="check" id="paid_cheque"> Check if paid by cheque
+
+       <br>
+      
+      <div id="cheque" style="display: none;">
+          <div class="form-group">
+            {!! Form::label('cheque_date', 'Cheque Date', array('class' => 'col-md-2 control-label')) !!}
+            <div class="col-md-9">
+              {!! Form::text('cheque_date', date('Y-m-3',  strtotime("-1 month")), ['class' => 'datepicker form-control required', 'id' => 'cheque_date']) !!}
+            </div>
+          </div>
+
+          <div class="form-group {{ $errors->has('cheque_number') ? 'has-error' : ''}}">
+            {!! Form::label('cheque_number', 'Cheque Number', array('class' => 'col-md-2 control-label')) !!}
+            <div class="col-md-5">
+              {!! Form::text('cheque_number', null, ['class' => 'form-control required', 'id' => 'cheque_number', 'placeholder' => 'Cheque Number (if applicable)','autocomplete' => 'off']) !!}
+            </div>
+            {!! $errors->first('cheque_number', '<span class="help-inline">:message</span>') !!}
+          </div>
+
+          
+      </div>
+      <br><br>
+    {!! Form::label('', '', array('class' => 'col-md-2 control-label')) !!}
+        {!! Form:: submit('PAY BILL', ['class' => 'btn btn-success']) !!}
+    {!!form::close()!!}
 @else
 
-Bill not yet generated
+Bill not yet generated/Bill aready paid
 
 @endif
 

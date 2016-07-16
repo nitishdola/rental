@@ -1,8 +1,18 @@
+
+
+<div class="form-group {{ $errors->has('name') ? 'has-error' : ''}}">
+  {!! Form::label('monthyear_from', 'Month', array('class' => 'col-md-2 control-label')) !!}
+  <div class="col-md-3">
+    {!! Form::text('monthyear', date('m-Y', strtotime('last month')), ['class' => 'monthpicker form-control required', 'id' => 'monthpicker', 'data-date-format' => "mm/yyyy",  'data-date-viewmode' => "years" , 'data-date-minviewmode' => "months", 'required' => 'true']) !!}
+  </div>
+</div>
+
 <div class="form-group">
   <div class="col-md-10">
     <input type="checkbox" id="selecctall"/> <b>Selecct All</b></li>
   </div>
 </div>
+
 @foreach($renters as $k => $v)
 <div class="form-group">
   <div class="col-md-10">
@@ -19,8 +29,17 @@ $("#selecctall").change(function(){
 });
 </script>
 @stop
-
+@section('pageJs')
+<script type="text/javascript" src="{{ asset('vendors/datepicker/js/bootstrap-datepicker.js') }}"></script>
+<script type="text/javascript" src="{{ asset('vendors/select2/select2.js') }}"></script>
+<script>
+$('.monthpicker').datepicker({
+    format: 'mm-yyyy'
+});
+</script>
+@stop
 @section('pageCss')
+<link href="{{ asset('vendors/datepicker/css/datepicker.css') }}" rel="stylesheet" type="text/css" />
 <script>
 	function countUnits(renter_id) {
 		data = '';
@@ -43,5 +62,13 @@ $("#selecctall").change(function(){
 			}
 		});
 	}
+</script>
+@stop
+
+@section('pageSpecificScripts')
+<script>
+$('.monthpicker').datepicker({
+    format: 'mm-yyyy'
+});
 </script>
 @stop
