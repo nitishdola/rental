@@ -180,9 +180,13 @@ class BillsController extends Controller
 
     public function receipt($rids, $eids) {
         $bill_receipt = [];
+        $total_electricity_bill = 0;
+
         if(!empty(json_decode($eids))) {
             foreach(json_decode($eids) as $k => $v) {
+               
                $bill = Bill::findOrFail($v);
+               $total_electricity_bill += $bill->bill_amount;
                $bill_receipt[$k]['current_meter_reading'] = $bill->current_meter_reading;
                $bill_receipt[$k]['previous_meter_reading']=$bill->previous_meter_reading;
                $bill_receipt[$k]['bill_amount'] = $bill->bill_amount;
@@ -195,6 +199,7 @@ class BillsController extends Controller
                $renter_id = $bill->renter_id;
             }
         }
+        $electrcity_bill_words = BillPayment::convertNumber( number_format($total_electricity_bill,2,".",","));
         $renterInfo = Renter::findOrFail($renter_id);
 
 
@@ -213,29 +218,8 @@ class BillsController extends Controller
                $total_rbill += $bill_payment->rent;
             }
         }
-        dump(json_decode($rids));
-
-        /*$monthyear  = date('Y-m');
-        $bill_details = BillPayment::where(['renter_id' => $renter_id, 'monthyear' => $monthyear.'-01'])->first();
-
-        $previous_bills = [];
-
-        $previous_bill_obj = BillPayment::where('monthyear', '<', $monthyear.'-1')->where('paid', 'no');
-
-        if($previous_bill_obj->count()) {
-            $previous_bills = $previous_bill_obj->get();
-        }
-
-        $p_bill = 0;
-        foreach($previous_bill_obj->get() as $k => $v) {
-            $p_bill += $v->total_payble;
-        }
-
-        $total_bill = $bill_details->total_payble + $p_bill;*/
 
         $rent_bill_words = BillPayment::convertNumber( number_format($total_rbill,2,".",","));
-        /*return view('bills.electricity_bill_receipt', compact('bill_receipt', 'renterInfo', 'bill_details', 'monthyear', 'previous_bills', 'words'));*/
-        dd($rent_bill);
-        return view('bills.receipt', compact('bill_receipt', 'renterInfo', 'rent_bill', 'words'));
+        return view('bills.receipt', compact('bill_receipt', 'renterInfo', 'rent_bill', 'words', 'total_electricity_bill', 'electrcity_bill_words', 'total_rbill'));
     }
 }
