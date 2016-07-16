@@ -54,12 +54,13 @@
                             <h3>VAISHALI COMPLEX</h3>
                             <h5>GS Road, Paltan Bazar, Guwahati - 781008</h5>
                         </div>
+                        <div class="col-xs-2"> Date : {{ date('d-m-Y') }} </div>
 
                         <div class="col-xs-12" style="text-align: left;">
                         <h5 style="line-height: 23px">Received with thanks from M/s {{ $renterInfo->name }} a sum of Rs. {{ number_format($bill_details->rent+$pending_bill,2,".",",") }} only in cash/cheque @if($bill_details->cheque_number != '') ( No- {{$bill_details->cheque_number}} date {{$bill_details->date }} ) @endif for the following accounts</h5>
 
                         <br>
-                        <p style="line-height: 24px;"> Rent ( {{ date('F, Y', strtotime($bill_details->monthyear))}} ) :  &#x20b9; {{$bill_details->rent}} </p>
+                        <p style="line-height: 24px;"> Rent ( {{ date('F, Y', strtotime($bill_details->monthyear))}} ) :  Rs. {{$bill_details->rent}} </p>
                         @if(count($previous_bills))
                             @foreach($previous_bills as $k2 => $v2) {
                             <p style="line-height: 24px;"> Rent( $v2->monthyear) : {{$v2->total_payble}} </p>
@@ -67,7 +68,7 @@
                         @endif
 
                         <div style="font-size: 24px">
-                            &#x20b9; {{ number_format($bill_details->rent+$pending_bill,2,".",",") }}
+                            Rs. {{ number_format($bill_details->rent+$pending_bill,2,".",",") }}
                         </div>
 
                         <div class="col-xs-6"></div>
@@ -94,7 +95,7 @@
     function Popup(data) 
     {
         var mywindow = window.open('', 'my div', 'height=400,width=600');
-        mywindow.document.write('<html><head><title>Tender</title>');
+        mywindow.document.write('<html><head><title></title>');
         /*optional stylesheet*/ 
         css_path = "{{ asset('css/bootstrap.min.css') }}";
         mywindow.document.write('<link rel="stylesheet" href="'+css_path+'" type="text/css" />');

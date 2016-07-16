@@ -61,7 +61,7 @@
 		            <td class="hidden-xs"> {{ $v->renter['name'] }} </td>
 		            <td> {{ $v->renter['phone_number'] }} </td>
 		            <td> {{ date('F,Y', strtotime($v->monthyear)) }} </td>
-		            <td> {{ strtoupper($v->paid) }} , Pending Amount : {{ $v->total_payble }}   @if($v->paid == 'yes') / {{ $v->total_payble }} / Paid on {{$v->pay_date}} @endif </td>
+		            <td> {{ strtoupper($v->paid) }} , @if($v->paid == 'no') Pending Amount : {{ $v->total_payble }} @endif  @if($v->paid == 'yes')  Paid on {{$v->pay_date}} @endif </td>
 		        </tr>
 		        @endforeach
 		    </tbody>

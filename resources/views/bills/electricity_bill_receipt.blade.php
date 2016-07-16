@@ -35,6 +35,8 @@
                                 <h5>GS Road, Paltan Bazar, Guwahati - 781008</h5>
                             </div>
 
+                            <div class="col-xs-2"> Date : {{ date('d-m-Y') }} </div>
+
                             <div class="col-xs-12" style="text-align: left;">
                             <h4>Tenant : {{ $renterInfo->name }}</h4>
                             </div>
@@ -94,7 +96,7 @@
                         </div>
 
                          <div class="row">
-                            <span style="font-size: 22px;">&#x20b9; {{ $v['bill_amount'] }}</span>
+                            <span style="font-size: 22px;">Rs. {{ $v['bill_amount'] }}</span>
                          </div>
                         @endforeach
                         @endif
@@ -128,7 +130,7 @@
     {
         var css_path = '';
         var mywindow = window.open('', 'my div', 'height=400,width=600');
-        mywindow.document.write('<html><head><title>Bill Electricity</title>');
+        mywindow.document.write('<html><head><title></title>');
         /*optional stylesheet*/ 
         css_path += "{{ asset('css/bootstrap.min.css') }}";
         mywindow.document.write('<link rel="stylesheet" href="'+css_path+'" type="text/css" />');

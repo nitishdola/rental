@@ -49,7 +49,7 @@
                     </div>
                 @endif
                 <div class="col-md-12">
-                <p> Total - R {{ $rent_bill }} + E {{ $elect_bill }} = &#x20b9; <?= number_format((float)$rent_bill+$elect_bill, 2, '.', ''); ?></p>
+                <p> Total - R {{ $rent_bill }} + E {{ $elect_bill }} = Rs. <?= number_format((float)$rent_bill+$elect_bill, 2, '.', ''); ?></p>
                 </div>
             @else
             * no bills found
