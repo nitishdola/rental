@@ -220,6 +220,6 @@ class BillsController extends Controller
         }
 
         $rent_bill_words = BillPayment::convertNumber( number_format($total_rbill,2,".",","));
-        return view('bills.receipt', compact('bill_receipt', 'renterInfo', 'rent_bill', 'words', 'total_electricity_bill', 'electrcity_bill_words', 'total_rbill'));
+        return view('bills.receipt', compact('bill_receipt', 'renterInfo', 'rent_bill', 'words', 'total_electricity_bill', 'electrcity_bill_words', 'total_rbill', 'rent_bill_words'));
     }
 }

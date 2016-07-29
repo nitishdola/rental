@@ -133,11 +133,11 @@
 			        @endif
 
 
-		            <td> {{ (($bill_results->currentPage() - 1 ) * $bill_results->perPage() ) + $count + $k }} </td>
+		            <td> {{ (($bill_results->currentPage() - 1 ) * $bill_results->perPage() ) + $count + $k1 }} </td>
 		            <td class="hidden-xs"> {{ $v1->renter['name'] }} </td>
 		            <td> {{ $v1->renter['phone_number'] }} </td>
 		            <td> {{ date('d-m-Y', strtotime($v1->period_from)) }} To {{ date('d-m-Y', strtotime($v1->period_to)) }} </td>
-		            <td> {{ strtoupper($v1->paid) }} , Pending Amount : {{ $v1->bill_amount }}   @if($v->paid == 'yes') / {{ $v->bill_amount }} @endif </td>
+		            <td> {{ strtoupper($v1->paid) }} , Pending Amount : {{ $v1->bill_amount }}   @if($v1->paid == 'yes') / {{ $v1->bill_amount }} @endif </td>
 		        </tr>
 		        @endforeach
 		    </tbody>

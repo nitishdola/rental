@@ -189,6 +189,7 @@ class BillPaymentsController extends Controller
         foreach($renters as $k => $v) {
             
             $bill[$k]['renter_name'] = $v->name;
+            $bill[$k]['renter_id'] = $v->id;
             //rent bill
             $rent_bills = BillPayment::where('paid', 'no')->where('renter_id', $v->id)->get();
             foreach($rent_bills as $kr => $vr) {
@@ -203,6 +204,11 @@ class BillPaymentsController extends Controller
             }
         }
         return view('bill_payments.notification', compact('bill'));
+    }
+
+    public function view_renter() {
+        $renters = Renter::orderBy('name')->where('status', 1)->lists('name', 'id')->toArray();
+        return view('bill_payments.view_renter', compact('renters'));
     }
     
 }

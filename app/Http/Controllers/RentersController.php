@@ -108,7 +108,8 @@ class RentersController extends Controller
         }
         return Redirect::route('renter.index')->with('message', $message);
     }
-    public function view_bill($renter_id) {
+    public function view_bill() {
+        $renter_id = $_GET['renter_id'];
         $monthyear  = date('Y-m', strtotime('last month'));
 
         $renterInfo = Renter::findOrFail($renter_id);

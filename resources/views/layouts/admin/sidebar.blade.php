@@ -55,6 +55,12 @@
         </a>
         <ul class="sub-menu">
             <li>
+                <a href="{{ route('bill_payment.view_renters')}}">
+                    <i class="fa fa-angle-double-right"></i>
+                    Pay Bill
+                </a>
+            </li>
+            <!-- <li>
                 <a href="{{ route('bill_payment.rent.view_renters')}}">
                     <i class="fa fa-angle-double-right"></i>
                     Pay Rent Bill
@@ -66,7 +72,7 @@
                     <i class="fa fa-angle-double-right"></i>
                     Pay Electricity Bill
                 </a>
-            </li>
+            </li> -->
 
             <li>
                 <a href=" {{ route('bill.report_search') }}">

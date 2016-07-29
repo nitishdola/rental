@@ -99,7 +99,7 @@ Route::group(['prefix'=>'renter'], function() {
         'uses' => 'RentersController@delete'
     ]);
 
-    Route::get('/view-bill/{num}', [
+    Route::get('/view-bill', [
         'as' => 'renter.view_bill',
         'middleware' => 'admin',
         'uses' => 'RentersController@view_bill'
@@ -259,6 +259,12 @@ Route::group(['prefix'=>'bill-payments'], function() {
         'as' => 'renter.notification',
         'middleware' => 'admin',
         'uses' => 'BillPaymentsController@create_notification'
+    ]);
+
+    Route::get('/view-renter', [
+        'as' => 'bill_payment.view_renters',
+        'middleware' => 'admin',
+        'uses' => 'BillPaymentsController@view_renter'
     ]);
 });
 

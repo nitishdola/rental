@@ -17,6 +17,9 @@
     .pending_amount {
         display: none;
     }
+    .paybtn {
+        display: none;
+    }
 }
 </style>
 @stop
@@ -32,24 +35,33 @@
             <?php $rent_bill = 0; $elect_bill = 0;?>
             @if(isset($v['bill_info']))
                 @if(isset($v['bill_info']['rent_bill']))
-                    <div class="col-md-6">
+                    <div class="col-xs-6">
                     <h5>Rent</h5>
+                    @if(isset($v['bill_info']['rent_bill']))
                     @foreach($v['bill_info']['rent_bill'] as $k1 => $v1)
-                        {{ date('F', strtotime($k1)) }} {{ $v1 }}<br>
+                        {{ date('F', strtotime($k1)) }} {{ round($v1) }}<br>
                         <?php $rent_bill += $v1; ?>
                     @endforeach
+                    @else
+                    No rent bill
+                    @endif
                     </div>
 
-                    <div class="col-md-6">
+                    <div class="col-xs-6">
                     <h5>Electricity</h5>
+                    @if(isset($v['bill_info']['electricity_bill']))
                     @foreach($v['bill_info']['electricity_bill'] as $k2 => $v2)
-                        {{ $k2 }} {{ $v2 }}<br>
+                        {{ $k2 }} {{ round($v2) }}<br>
                         <?php $elect_bill += $v2; ?>
                     @endforeach
+                    @else
+                    No electricity bill
+                    @endif
                     </div>
                 @endif
                 <div class="col-md-12">
-                <p> Total - R {{ $rent_bill }} + E {{ $elect_bill }} = Rs. <?= number_format((float)$rent_bill+$elect_bill, 2, '.', ''); ?></p>
+                <p> Total - R {{ $rent_bill }} + E {{ $elect_bill }} = Rs. <?= number_format((float)round($rent_bill+$elect_bill), 2, '.', ''); ?></p>
+                <p class="paybtn"><a href="{{route('renter.view_bill', array('renter_id' => $v['renter_id'] ))}}" class="btn btn-danger">PAY</a></p>
                 </div>
             @else
             * no bills found
@@ -79,10 +91,11 @@
     function Popup(data) 
     {
         var mywindow = window.open('', 'my div', 'height=400,width=600');
-        mywindow.document.write('<html><head><title>Tender</title>');
+        mywindow.document.write('<html><head><title>Notification List</title>');
         /*optional stylesheet*/ 
         css_path = "{{ asset('css/bootstrap.min.css') }}";
         mywindow.document.write('<link rel="stylesheet" href="'+css_path+'" type="text/css" />');
+        mywindow.document.write('<style>.paybtn {display: none;}" </style>');
         mywindow.document.write('</head><body >');
         mywindow.document.write(data);
         mywindow.document.write('</body></html>');
