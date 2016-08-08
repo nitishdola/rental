@@ -35,7 +35,7 @@
                                         <h5>GS Road, Paltan Bazar, Guwahati - 781008</h5>
                                     </div>
 
-                                    <div class="col-xs-2"> Date : {{ date('d-m-Y') }} </div>
+                                    <div class="col-xs-3"> Date : {{ date('d-m-Y') }} </div>
 
                                     <div class="col-xs-12" style="text-align: left;">
                                     <h4>Tenant : {{ $renterInfo->name }}</h4>
@@ -43,7 +43,6 @@
                                 </div>
 
                                 @foreach($bill_receipt as $k => $v)
-
                                 <br>
                                 <div class="row">
                                     <div class="col-xs-3">
@@ -87,14 +86,15 @@
                                         Electricity Charges : 
                                     </div>
                                     <div class="col-xs-3">
-                                          @Rs {{ $v['unit_cost']  }} per unit
+                                        @Rs {{ $v['unit_cost']  }} per unit<br>
+                                          Rs. <b>{{ ($v['current_meter_reading'] - $v['previous_meter_reading'] ) * $v['unit_cost']  }} </b>
                                     </div>
                                 </div>
                                 @endforeach
 
                                 <div class="row">
                                     <div class="col-xs-12">
-                                        <span style="font-size: 18px;">Rs. {{ number_format($total_electricity_bill,2,".",",")}}</span>
+                                        <span style="font-size: 18px;">Rs. {{ number_format(ceil($total_electricity_bill),2,".",",")}}</span>
                                     </div>
                                 </div>
                                 <div class="row">
@@ -125,7 +125,7 @@
                                     <h3>VAISHALI COMPLEX</h3>
                                     <h5>GS Road, Paltan Bazar, Guwahati - 781008</h5>
                                 </div>
-                                <div class="col-xs-2"> Date : {{ date('d-m-Y') }} </div>
+                                <div class="col-xs-3"> Date : {{ date('d-m-Y') }} </div>
 
                                 <div class="col-xs-12" style="text-align: left;">
                                     <h5 style="line-height: 23px">Received with thanks from M/s {{ $renterInfo->name }} a sum of Rs. {{ number_format($total_rbill,2,".",",") }} only in cash/cheque for the following accounts</h5>
@@ -142,7 +142,7 @@
 
                                 <div class="col-xs-12" style="text-align: left;">
                                     <div style="font-size: 18px">
-                                        Rs. {{ number_format($total_rbill,2,".",",") }}
+                                        Rs. {{ number_format(ceil($total_rbill),2,".",",") }}
                                     </div>
                                 </div>
 

@@ -115,7 +115,7 @@ class RentersController extends Controller
         $renterInfo = Renter::findOrFail($renter_id);
         $bill_details = BillPayment::where(['renter_id' => $renter_id, 'monthyear' => $monthyear.'-01'])->where('paid', 'no')->first();
 
-        $previous_bills = BillPayment::where('monthyear', '<', $monthyear.'-1')->where('paid', 'no')->get();
+        $previous_bills = BillPayment::where('renter_id', $renter_id)->where('monthyear', '<', $monthyear.'-1')->where('paid', 'no')->get();
 
 
 

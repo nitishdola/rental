@@ -90,23 +90,37 @@
 
     function Popup(data) 
     {
-        var mywindow = window.open('', 'my div', 'height=400,width=600');
-        mywindow.document.write('<html><head><title>Notification List</title>');
+       
+     var mywindow = window.open('', 'my div', 'height=400,width=600');
+    /*optional stylesheet*/ 
+    css_path = "{{ asset('css/bootstrap.min.css') }}";
+    $(mywindow.document.head).html( '<title>Notification List</title><link rel="stylesheet" href="+css_path+" type="text/css" />'); 
+    $(mywindow.document.body).html( '<body>' + data + '</body>'); 
+    
+    mywindow.document.close();
+    mywindow.focus(); // necessary for IE >= 10
+    mywindow.print();
+    mywindow.close();
+
+    return true;
+
+        //var mywindow = window.open('', 'my div', 'height=400,width=600');
+        //mywindow.document.write('<html><head><title>Notification List</title>');
         /*optional stylesheet*/ 
-        css_path = "{{ asset('css/bootstrap.min.css') }}";
-        mywindow.document.write('<link rel="stylesheet" href="'+css_path+'" type="text/css" />');
-        mywindow.document.write('<style>.paybtn {display: none;}" </style>');
-        mywindow.document.write('</head><body >');
-        mywindow.document.write(data);
-        mywindow.document.write('</body></html>');
+        //css_path = "{{ asset('css/bootstrap.min.css') }}";
+        //mywindow.document.write('<link rel="stylesheet" href="'+css_path+'" type="text/css" />');
+        //mywindow.document.write('<style>.paybtn {display: none;}" </style>');
+        //mywindow.document.write('</head><body >');
+        //mywindow.document.write(data);
+        //mywindow.document.write('</body></html>');
 
-        mywindow.document.close(); // necessary for IE >= 10
-        mywindow.focus(); // necessary for IE >= 10
+        //mywindow.document.close(); // necessary for IE >= 10
+        //mywindow.focus(); // necessary for IE >= 10
 
-        mywindow.print();
-        mywindow.close();
+        //mywindow.print();
+        //mywindow.close();
 
-        return true;
+        //return true;
     }
 
 </script>

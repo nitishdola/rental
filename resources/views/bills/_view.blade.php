@@ -46,7 +46,7 @@
 
 	    <tbody style="text-align:center">
 	    	<tr>
-	    		<td> Rent </td>
+	    		<td> Rent for {{ date('M', strtotime($bill_details->monthyear)) }}</td>
 	    		<td> {{ number_format($bill_details->rent,2,".",",") }} </td>
 	    	</tr>
         

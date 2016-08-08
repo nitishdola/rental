@@ -9,7 +9,7 @@
 <div class="form-group {{ $errors->has('period_from') ? 'has-error' : ''}}">
   {!! Form::label('period_from', 'Period From', array('class' => 'col-md-2 control-label')) !!}
   <div class="col-md-5">
-    {!! Form::text('period_from', date('Y-m-3',  strtotime("-1 month")), ['class' => 'datepicker form-control required', 'id' => 'period_from', 'required' => 'true']) !!}
+    {!! Form::text('period_from', date('Y-m-1',  strtotime("-1 month")), ['class' => 'datepicker form-control required', 'id' => 'period_from', 'required' => 'true']) !!}
   </div>
   {!! $errors->first('period_from', '<span class="help-inline">:message</span>') !!}
 </div>
@@ -17,7 +17,7 @@
 <div class="form-group {{ $errors->has('period_to') ? 'has-error' : ''}}">
   {!! Form::label('period_to', 'Period To', array('class' => 'col-md-2 control-label')) !!}
   <div class="col-md-5">
-    {!! Form::text('period_to', date('Y-m-2'), ['class' => 'datepicker form-control required', 'id' => 'period_to', 'required' => 'true']) !!}
+    {!! Form::text('period_to', date('Y-m-t', strtotime("-1 month")), ['class' => 'datepicker form-control required', 'id' => 'period_to', 'required' => 'true']) !!}
   </div>
   {!! $errors->first('period_to', '<span class="help-inline">:message</span>') !!}
 </div>
