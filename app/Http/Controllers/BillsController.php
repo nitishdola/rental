@@ -198,28 +198,33 @@ class BillsController extends Controller
 
                $renter_id = $bill->renter_id;
             }
-        }
-        $electrcity_bill_words = BillPayment::convertNumber( number_format($total_electricity_bill,2,".",","));
-        $renterInfo = Renter::findOrFail($renter_id);
+
+            $electrcity_bill_words = BillPayment::convertNumber( number_format($total_electricity_bill,2,".",","));
+            $renterInfo = Renter::findOrFail($renter_id);
 
 
 
-        ////Rent Bill///
-        $rent_bill = [];
-        $total_rbill = 0;
-        if(!empty(json_decode($rids))) {
-            foreach(json_decode($rids) as $k1 => $v1) {
-               $bill_payment = BillPayment::findOrFail($v1);
-               $rent_bill[$k1]['rent'] = $bill_payment->rent;
-               $rent_bill[$k1]['monthyear']=$bill_payment->monthyear;
-               $rent_bill[$k1]['pay_date'] = $bill_payment->pay_date;
-               $rent_bill[$k1]['cheque_number'] = $bill_payment->cheque_number;
+            ////Rent Bill///
+            $rent_bill = [];
+            $total_rbill = 0;
+            if(!empty(json_decode($rids))) {
+                foreach(json_decode($rids) as $k1 => $v1) {
+                   $bill_payment = BillPayment::findOrFail($v1);
+                   $rent_bill[$k1]['rent'] = $bill_payment->rent;
+                   $rent_bill[$k1]['monthyear']=$bill_payment->monthyear;
+                   $rent_bill[$k1]['pay_date'] = $bill_payment->pay_date;
+                   $rent_bill[$k1]['cheque_number'] = $bill_payment->cheque_number;
 
-               $total_rbill += $bill_payment->rent;
+                   $total_rbill += $bill_payment->rent;
+                }
             }
-        }
 
-        $rent_bill_words = BillPayment::convertNumber( number_format($total_rbill,2,".",","));
-        return view('bills.receipt', compact('bill_receipt', 'renterInfo', 'rent_bill', 'words', 'total_electricity_bill', 'electrcity_bill_words', 'total_rbill', 'rent_bill_words'));
+            $rent_bill_words = BillPayment::convertNumber( number_format($total_rbill,2,".",","));
+            return view('bills.receipt', compact('bill_receipt', 'renterInfo', 'rent_bill', 'words', 'total_electricity_bill', 'electrcity_bill_words', 'total_rbill', 'rent_bill_words'));
+        }else{
+            $message = 'Electricity Bill Not entered';
+            return Redirect::route('bill.create')->with('message', $message);
+        }
+        
     }
 }
